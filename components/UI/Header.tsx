@@ -1,4 +1,3 @@
-import React, { Dispatch, FC, SetStateAction } from 'react';
 import {
   ActionIcon,
   Burger,
@@ -9,9 +8,10 @@ import {
   Input,
   MediaQuery,
 } from '@mantine/core';
-import NextLink from 'next/link';
 import { MantineLogo } from '@mantine/ds';
 import { IconGardenCart, IconSearch } from '@tabler/icons';
+import NextLink from 'next/link';
+import { Dispatch, FC, SetStateAction } from 'react';
 
 interface Props {
   opened: boolean;
@@ -20,7 +20,7 @@ interface Props {
 
 export const Header: FC<Props> = ({ opened, setOpened }) => (
   <MantineHeader height={60}>
-    <Container className="header_app" fluid>
+    <Container className="header-content" fluid>
       <Group>
         <MantineLogo size={28} />
       </Group>

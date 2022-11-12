@@ -1,8 +1,8 @@
-import { TablerIcon } from '@tabler/icons';
-import { useRouter } from 'next/router';
-import React, { FC } from 'react';
-import NextLink from 'next/link';
 import { Box, Center } from '@mantine/core';
+import { TablerIcon } from '@tabler/icons';
+import NextLink from 'next/link';
+import { useRouter } from 'next/router';
+import { FC } from 'react';
 
 // TODO: TERMINAR LINKS DE NAVBAR EN PANTALLA PEQUEÑA
 
@@ -17,7 +17,7 @@ const NavBarLink: FC<Props> = ({ icon: Icon, label, href }) => {
   const active = asPath === href;
   return (
     <NextLink href={href}>
-      <Box className={`navbar_link_with_icon ${active && 'navbar_link_with_icon_active'}`}>
+      <Box className={`navbar-link-with-icon ${active && 'navbar-link-with-icon-active'}`}>
         <Center inline>
           <Icon />
           <Box ml="sm">{label}</Box>
