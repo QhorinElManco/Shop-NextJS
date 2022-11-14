@@ -27,7 +27,7 @@ export const ShopLayout: FC<Props> = ({ children, title, description, imageFullU
         navbar={<Navbar hidden={!opened} />}
         navbarOffsetBreakpoint="sm"
       >
-        <Container size="xl">{children}</Container>
+        <Container fluid>{children}</Container>
       </AppShell>
     </>
   );
