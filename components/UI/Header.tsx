@@ -19,7 +19,7 @@ interface Props {
 }
 
 export const Header: FC<Props> = ({ opened, setOpened }) => (
-  <MantineHeader height={60}>
+  <MantineHeader height={{ base: 60 }}>
     <Container className="header-content" fluid>
       <Group>
         <MantineLogo size={28} />
