@@ -4,13 +4,13 @@ export interface IProduct {
   images: string[];
   inStock: number;
   price: number;
-  size: IProductSizes[];
+  size: IProductSize[];
   slug: string;
   tags: string[];
   title: string;
-  type: IProductTypes;
+  type: IProductType;
   gender: 'men' | 'women' | 'kid' | 'unisex';
 }
 
-export type IProductSizes = 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL' | 'XXXL';
-export type IProductTypes = 'shirts' | 'pants' | 'hoodies' | 'hats';
+export type IProductSize = 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL' | 'XXXL';
+export type IProductType = 'shirts' | 'pants' | 'hoodies' | 'hats';
