@@ -24,6 +24,12 @@ export const globalStyles = (theme: MantineTheme) => ({
     },
   },
 
+  '.empty-cart': {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+
   '.navbar-link-with-icon': {
     display: 'flex',
     alignItems: 'center',
@@ -40,5 +46,32 @@ export const globalStyles = (theme: MantineTheme) => ({
   '.fade': {
     WebkitAnimation: `${fadeIn} 1.5s both`,
     animation: `${fadeIn} 1.5s both`,
+  },
+
+  '.mantine-Carousel-root': {
+    '&:hover': {
+      '& .mantine-Carousel-control': {
+        opacity: 1,
+      },
+    },
+  },
+
+  '.mantine-Carousel-control': {
+    transition: 'opacity 150ms ease',
+    opacity: 0,
+  },
+
+  '.grid-content-center': {
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'column',
+  },
+  '.grid-content-left': {
+    display: 'flex',
+    justifyContent: 'end',
+  },
+  '.grid-content-space-between': {
+    display: 'flex',
+    justifyContent: 'end',
   },
 });
