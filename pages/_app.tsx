@@ -53,11 +53,28 @@ export function App(props: AppProps & { colorScheme: ColorScheme }) {
             },
             primaryColor: 'brown',
             globalStyles: globalStyles as ((theme: MantineTheme) => CSSObject) | undefined,
+            defaultRadius: 'md',
+            components: {
+              Button: {
+                defaultProps: {
+                  radius: 'lg',
+                },
+              },
+              Card: {
+                defaultProps: {
+                  radius: 'md',
+                },
+              },
+              TextInput: {
+                defaultProps: {
+                  variant: 'filled',
+                },
+              },
+            },
           }}
           withGlobalStyles
           withNormalizeCSS
         >
-          {/* <MyGlobalStyles /> */}
           <SpotlightProvider
             actions={[]}
             searchIcon={<IconSearch size={18} />}
