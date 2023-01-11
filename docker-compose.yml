@@ -1,0 +1,12 @@
+services:
+  shopdb:
+    image: mongo:6.0.3
+    restart: always
+    container_name: shop-database
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodata:/data/db
+
+volumes:
+  mongodata:
