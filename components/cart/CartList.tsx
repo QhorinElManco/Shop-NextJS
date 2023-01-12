@@ -15,7 +15,6 @@ export const CartList: FC<Props> = ({ editable = false }) => (
     {productsInCart.map((product) => (
       <Grid gutter="sm" key={product.slug}>
         <Grid.Col xs={2}>
-          {/* TODO: AGREGA PÁGINA DEL PRODUCTO */}
           <Anchor component={NextLink} href="product/slug">
             <Image
               width={100}
