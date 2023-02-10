@@ -1,5 +1,5 @@
 import { Box, Center } from '@mantine/core';
-import { TablerIcon } from '@tabler/icons';
+import { Icon as TablerIcon } from '@tabler/icons-react';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { FC } from 'react';

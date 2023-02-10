@@ -1,7 +1,7 @@
 import { ActionIcon, Group, GroupProps, Text } from '@mantine/core';
-import { IconMinus, IconPlus } from '@tabler/icons';
-import React, { FC } from 'react';
 import { useCounter } from '@mantine/hooks';
+import { IconMinus, IconPlus } from '@tabler/icons-react';
+import { FC } from 'react';
 
 interface Props {
   // stock: number;

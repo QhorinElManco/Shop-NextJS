@@ -1,4 +1,3 @@
-import React, { FC } from 'react';
 import {
   ActionIcon,
   Avatar,
@@ -27,7 +26,8 @@ import {
   IconSettings,
   IconUser,
   IconUserCircle,
-} from '@tabler/icons';
+} from '@tabler/icons-react';
+import { FC } from 'react';
 import NavBarIconLink from './NavBarIconLink';
 import NavBarLink from './NavBarLink';
 

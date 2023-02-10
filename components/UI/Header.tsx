@@ -9,7 +9,7 @@ import {
   MediaQuery,
 } from '@mantine/core';
 import { MantineLogo } from '@mantine/ds';
-import { IconGardenCart, IconSearch } from '@tabler/icons';
+import { IconGardenCart, IconSearch } from '@tabler/icons-react';
 import NextLink from 'next/link';
 import { Dispatch, FC, SetStateAction } from 'react';
 

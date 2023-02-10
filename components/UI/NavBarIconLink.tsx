@@ -1,8 +1,8 @@
 import { ActionIcon, Tooltip, useMantineTheme } from '@mantine/core';
+import { Icon as TablerIcon } from '@tabler/icons-react';
 import NextLink from 'next/link';
-import { TablerIcon } from '@tabler/icons';
 import { useRouter } from 'next/router';
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 interface Props {
   icon: TablerIcon;

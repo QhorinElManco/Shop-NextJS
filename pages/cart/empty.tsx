@@ -1,5 +1,5 @@
 import { Anchor, Box, Title } from '@mantine/core';
-import { IconShoppingCartOff } from '@tabler/icons';
+import { IconShoppingCartOff } from '@tabler/icons-react';
 import NextLink from 'next/link';
 import { ShopLayout } from '../../components/Layouts';
 
