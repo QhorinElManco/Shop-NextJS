@@ -1,16 +1,27 @@
 import { Grid, Space, Title } from '@mantine/core';
 import { ShopLayout } from 'components/Layouts';
-import { initialData } from 'database/products';
-import { ProductList } from '../components/Products';
+import { ProductList } from 'components/Products';
+import { SkeletonRowProductCard } from 'components/Skeletons';
+import { useProducts } from 'hooks';
 
-export const HomePage = () => (
-  <ShopLayout title="Shop NextJS" description="Una tienda llena de productos interesantes">
-    <Title order={3}>All products</Title>
-    <Space h="md" />
-    <Grid>
-      <ProductList products={initialData.products as any} />
-    </Grid>
-  </ShopLayout>
-);
+export const HomePage = () => {
+  const { productsQuery } = useProducts();
 
+  return (
+    <ShopLayout title="Shop NextJS" description="Una tienda llena de productos interesantes">
+      <Title order={3}>All products</Title>
+      <Space h="md" />
+      <Grid>
+        {productsQuery.isLoading ? (
+          <>
+            <SkeletonRowProductCard />
+            <SkeletonRowProductCard />
+          </>
+        ) : (
+          <ProductList products={productsQuery.data || []} />
+        )}
+      </Grid>
+    </ShopLayout>
+  );
+};
 export default HomePage;

@@ -1,6 +1,6 @@
-import React, { FC } from 'react';
 import { Grid } from '@mantine/core';
 import { IProduct } from 'interfaces';
+import { FC } from 'react';
 import { ProductCard } from './ProductCard';
 
 interface Props {
@@ -8,7 +8,6 @@ interface Props {
 }
 
 export const ProductList: FC<Props> = ({ products }) => (
-  // console.log('Product-list');
   <Grid>
     {products.map((product) => (
       <ProductCard product={product} key={product.slug} />
