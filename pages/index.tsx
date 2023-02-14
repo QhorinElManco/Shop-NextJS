@@ -1,7 +1,7 @@
 import { Grid, Space, Title } from '@mantine/core';
 import { ShopLayout } from 'components/Layouts';
 import { ProductList } from 'components/Products';
-import { SkeletonRowProductCard } from 'components/Skeletons';
+import { SkeletonRowProductCard } from 'components/UI/Skeletons';
 import { useProducts } from 'hooks';
 
 export const HomePage = () => {
