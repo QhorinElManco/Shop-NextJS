@@ -4,6 +4,7 @@ module.exports = {
     'plugin:@next/next/recommended',
     'plugin:jest/recommended',
     'plugin:storybook/recommended',
+    'plugin:@tanstack/eslint-plugin-query/recommended',
   ],
   plugins: ['testing-library', 'jest'],
   overrides: [

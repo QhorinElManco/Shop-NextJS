@@ -18,6 +18,7 @@ specifiers:
   '@storybook/react': ^6.5.16
   '@tabler/icons': ^1.119.0
   '@tabler/icons-react': ^2.3.0
+  '@tanstack/eslint-plugin-query': ^4.24.8
   '@tanstack/react-query': ^4.24.4
   '@tanstack/react-query-devtools': ^4.24.4
   '@testing-library/dom': ^8.20.0
@@ -87,6 +88,7 @@ devDependencies:
   '@babel/core': 7.20.12
   '@next/eslint-plugin-next': 13.1.6
   '@storybook/react': 6.5.16_dunrfv6nxq3m2gch3idnlm4ery
+  '@tanstack/eslint-plugin-query': 4.24.8
   '@testing-library/dom': 8.20.0
   '@testing-library/jest-dom': 5.16.5
   '@testing-library/react': 13.4.0_biqbaboplfbrettd7655fr4n2y
@@ -4501,6 +4503,10 @@ packages:
   /@tabler/icons/2.3.0:
     resolution: {integrity: sha512-zYSgqYodvuuJPNl+Z5UaAP1adzONtCS923aKp7k6SuchrNOc8HE45epzI3ED0X2glYmFkd0Y/YXqPDhYi2p3Fw==}
     dev: false
+
+  /@tanstack/eslint-plugin-query/4.24.8:
+    resolution: {integrity: sha512-0ND7PSwsceAhuI+acdGiEK1D+LvP/EYESwtxAGhQ0yYLUPB6xAWHiytXokQcL5PgHMpiqe1+NWcRSH/U3NFtrA==}
+    dev: true
 
   /@tanstack/match-sorter-utils/8.7.6:
     resolution: {integrity: sha512-2AMpRiA6QivHOUiBpQAVxjiHAA68Ei23ZUMNaRJrN6omWiSFLoYrxGcT6BXtuzp0Jw4h6HZCmGGIM/gbwebO2A==}
