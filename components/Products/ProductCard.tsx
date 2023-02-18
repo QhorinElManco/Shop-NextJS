@@ -1,8 +1,10 @@
 import { Card, Grid, Image, Title } from '@mantine/core';
 import { useHover } from '@mantine/hooks';
+import { useQueryClient } from '@tanstack/react-query';
 import { IProduct } from 'interfaces';
 import NextLink from 'next/link';
 import { FC, useMemo, useState } from 'react';
+import { fetcher } from 'utils/request';
 
 interface Props {
   product: IProduct;
@@ -10,6 +12,7 @@ interface Props {
 
 export const ProductCard: FC<Props> = ({ product }) => {
   const { hovered: isHovered, ref } = useHover();
+  const queryClient = useQueryClient();
   const [isImageLoaded, setIsImageLoaded] = useState<boolean>(false);
 
   const productImage = useMemo(
@@ -17,22 +20,46 @@ export const ProductCard: FC<Props> = ({ product }) => {
     [isHovered, product.images]
   );
 
+  const prefetchProduct = () =>
+    queryClient.prefetchQuery(['product', product.slug], () =>
+      fetcher<IProduct>(`/api/products/${product.slug}`, {})
+    );
+
   return (
     <Grid.Col xs={12} sm={12} md={3} ref={ref}>
-      <Card>
-        <Card.Section component={NextLink} href="product/slug" prefetch={false}>
-          <Image
-            className="fade"
-            src={productImage}
-            alt={product.title}
-            onLoad={() => setIsImageLoaded(true)}
-            withPlaceholder
-          />
-        </Card.Section>
-        <Card.Section sx={{ display: isImageLoaded ? 'block' : 'none' }} className="fade">
-          <Title order={6}>{product.title}</Title>
-          <Title order={6}>{`$${product.price}`}</Title>
-        </Card.Section>
+      <Card
+        p="md"
+        radius="md"
+        component={NextLink}
+        href={`product/${product.slug}`}
+        prefetch={false}
+        sx={(theme) => ({
+          transition: 'transform 150ms ease, box-shadow 150ms ease',
+          '&:hover': {
+            transform: 'scale(1.01)',
+            boxShadow: theme.shadows.md,
+          },
+        })}
+        onMouseEnter={prefetchProduct}
+      >
+        <Image
+          className="fade"
+          src={productImage}
+          alt={product.title}
+          onLoad={() => setIsImageLoaded(true)}
+          withPlaceholder
+        />
+        <Title order={6} className="fade" sx={{ display: isImageLoaded ? 'block' : 'none' }}>
+          {product.title}
+        </Title>
+        <Title
+          order={6}
+          color="dimmed"
+          className="fade"
+          sx={{ display: isImageLoaded ? 'block' : 'none' }}
+        >
+          {`$${product.price}`}
+        </Title>
       </Card>
     </Grid.Col>
   );
