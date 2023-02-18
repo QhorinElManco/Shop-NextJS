@@ -1,5 +1,5 @@
 import { Chip, ChipGroupProps } from '@mantine/core';
-import React, { FC, useState } from 'react';
+import { FC, useState } from 'react';
 
 import { IProductSize } from '../../interfaces';
 
@@ -21,7 +21,7 @@ export const SizeSelector: FC<Props & ChipGroupProps> = ({
       {...chipGroupProps}
     >
       {sizes.map((size) => (
-        <Chip variant="filled" value={size} key={size}>
+        <Chip value={size} key={size}>
           {size}
         </Chip>
       ))}
