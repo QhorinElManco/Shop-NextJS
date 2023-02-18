@@ -8,20 +8,18 @@ import {
 import { NotificationsProvider } from '@mantine/notifications';
 import { SpotlightProvider } from '@mantine/spotlight';
 import { IconSearch } from '@tabler/icons-react';
-import { DehydratedState, Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { getCookie, setCookie } from 'cookies-next';
 import { GetServerSidePropsContext } from 'next';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { globalStyles } from 'styles/global.styles';
 
-export function App(
-  props: AppProps & { colorScheme: ColorScheme; dehydratedState: DehydratedState }
-) {
-  const { Component, pageProps, dehydratedState } = props;
-  const [queryClient] = useState(() => new QueryClient());
+export function App(props: AppProps & { colorScheme: ColorScheme }) {
+  const { Component, pageProps } = props;
+  const queryClient = useRef(new QueryClient());
   const [colorScheme, setColorScheme] = useState<ColorScheme>(props.colorScheme);
 
   const toggleColorScheme = (value?: ColorScheme) => {
@@ -38,9 +36,9 @@ export function App(
         <link rel="shortcut icon" href="/favicon.svg" />
       </Head>
 
-      <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={queryClient.current}>
         <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
-          <Hydrate state={dehydratedState}>
+          <Hydrate state={pageProps.dehydratedState}>
             <ReactQueryDevtools initialIsOpen={false} />
             <MantineProvider
               theme={{

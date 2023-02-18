@@ -4,13 +4,12 @@ import { ShopLayout } from 'components/Layouts';
 import { ProductCarousel, SizeSelector } from 'components/Products';
 import { dbProducts } from 'database';
 import { useProduct } from 'hooks';
-import { GetServerSideProps } from 'next';
+import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import { FullScreenLoading, ItemCounter } from '../../components/UI';
 
 export const ProductPage = () => {
   const { query } = useRouter();
-
   const { productQuery } = useProduct(query.slug as string);
 
   if (productQuery.isLoading) {
@@ -50,10 +49,10 @@ export const ProductPage = () => {
           </Box>
           {/* Agregar al carrito */}
           <Button fullWidth>Add to cart</Button>
-          {/*<Chip variant="outline" checked={false}>*/}
-          {/*  No disponible*/}
-          {/*</Chip>*/}
-          {/*  Descripción */}
+          {/* <Chip variant="outline" checked={false}>
+            No disponible
+          </Chip> */}
+          {/* Descripción */}
           <Box mt="xl">
             <Title order={4}>Description</Title>
             <Text>{productQuery.data.description}</Text>
@@ -63,16 +62,30 @@ export const ProductPage = () => {
     </ShopLayout>
   );
 };
-
 export default ProductPage;
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
+export const getStaticPaths: GetStaticPaths = async () => {
+  const slugs = await dbProducts.getAllProductSlugs();
+
+  return {
+    paths: slugs.map(({ slug }) => ({
+      params: {
+        slug,
+      },
+    })),
+    fallback: 'blocking',
+  };
+};
+
+export const getStaticProps: GetStaticProps = async (ctx) => {
   const queryClient = new QueryClient();
+
   const { slug } = ctx.params as { slug: string };
 
-  const product = await queryClient.fetchQuery(['product', slug], () =>
-    dbProducts.getProductsBySlug(slug)
-  );
+  const product = await queryClient.fetchQuery({
+    queryKey: ['product', slug],
+    queryFn: () => dbProducts.getProductsBySlug(slug),
+  });
 
   if (!product) {
     return {
@@ -87,5 +100,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     props: {
       dehydratedState: dehydrate(queryClient),
     },
+    revalidate: 60 * 60 * 24,
   };
 };
