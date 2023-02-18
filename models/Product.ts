@@ -23,7 +23,7 @@ const productSchema = new Schema(
       required: true,
       default: 0,
     },
-    size: [
+    sizes: [
       {
         type: String,
         enum: {
