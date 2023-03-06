@@ -1,10 +1,4 @@
-import {
-  ColorScheme,
-  ColorSchemeProvider,
-  CSSObject,
-  MantineProvider,
-  MantineTheme,
-} from '@mantine/core';
+import { ColorScheme, ColorSchemeProvider, MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import { SpotlightProvider } from '@mantine/spotlight';
 import { IconSearch } from '@tabler/icons-react';
@@ -15,7 +9,7 @@ import { GetServerSidePropsContext } from 'next';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useState } from 'react';
-import { globalStyles } from 'styles/global.styles';
+import { configTheme } from 'styles/theme.config';
 
 export function App(
   props: AppProps & { colorScheme: ColorScheme; dehydratedState: DehydratedState }
@@ -45,40 +39,7 @@ export function App(
             <MantineProvider
               theme={{
                 colorScheme,
-                colors: {
-                  brown: [
-                    '#EFEBE9',
-                    '#D7CCC8',
-                    '#BCAAA4',
-                    '#A1887F',
-                    '#8D6E63',
-                    '#795548',
-                    '#6D4C41',
-                    '#5D4037',
-                    '#4E342E',
-                    '#3E2723',
-                  ],
-                },
-                primaryColor: 'brown',
-                globalStyles: globalStyles as ((theme: MantineTheme) => CSSObject) | undefined,
-                defaultRadius: 'md',
-                components: {
-                  Button: {
-                    defaultProps: {
-                      radius: 'lg',
-                    },
-                  },
-                  Card: {
-                    defaultProps: {
-                      radius: 'md',
-                    },
-                  },
-                  TextInput: {
-                    defaultProps: {
-                      variant: 'filled',
-                    },
-                  },
-                },
+                ...configTheme,
               }}
               withGlobalStyles
               withNormalizeCSS
