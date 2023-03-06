@@ -14,6 +14,7 @@ import {
   Tooltip,
   useMantineTheme,
 } from '@mantine/core';
+import { useSpotlight } from '@mantine/spotlight';
 import {
   IconArrowNarrowRight,
   IconCalendarStats,
@@ -75,6 +76,7 @@ const listMenu = [
 // TODO: CORREGIR PADDING EN NAVBAR
 export const Navbar: FC<Props> = ({ hidden }) => {
   const theme = useMantineTheme();
+  const spotlight = useSpotlight();
   return (
     <MantineNavbar
       width={{
@@ -99,7 +101,7 @@ export const Navbar: FC<Props> = ({ hidden }) => {
           </Center>
         </MediaQuery>
         <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
-          <Box mx="md">
+          <Box m="md">
             <Input
               icon={<IconSearch size={14} />}
               placeholder="Search"
@@ -109,6 +111,7 @@ export const Navbar: FC<Props> = ({ hidden }) => {
                   <IconArrowNarrowRight />
                 </ActionIcon>
               }
+              onClick={() => spotlight.openSpotlight()}
             />
           </Box>
         </MediaQuery>

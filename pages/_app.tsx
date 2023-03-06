@@ -1,9 +1,8 @@
 import { ColorScheme, ColorSchemeProvider, MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
-import { SpotlightProvider } from '@mantine/spotlight';
-import { IconSearch } from '@tabler/icons-react';
 import { DehydratedState, Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { Spotlight } from 'components/Spotlight';
 import { getCookie, setCookie } from 'cookies-next';
 import { GetServerSidePropsContext } from 'next';
 import { AppProps } from 'next/app';
@@ -44,15 +43,10 @@ export function App(
               withGlobalStyles
               withNormalizeCSS
             >
-              <SpotlightProvider
-                actions={[]}
-                searchIcon={<IconSearch size={18} />}
-                searchPlaceholder="Search..."
-                nothingFoundMessage="Nothing found..."
-              >
-                <Notifications />
+              <Notifications />
+              <Spotlight>
                 <Component {...pageProps} />
-              </SpotlightProvider>
+              </Spotlight>
             </MantineProvider>
           </Hydrate>
         </ColorSchemeProvider>
