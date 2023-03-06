@@ -21,7 +21,7 @@ export const SizeSelector: FC<Props & ChipGroupProps> = ({
       {...chipGroupProps}
     >
       {sizes.map((size) => (
-        <Chip value={size} key={size}>
+        <Chip value={size} key={size} display="inline" mr="xs" variant="filled">
           {size}
         </Chip>
       ))}
