@@ -5,21 +5,23 @@ import {
   MantineProvider,
   MantineTheme,
 } from '@mantine/core';
-import { NotificationsProvider } from '@mantine/notifications';
+import { Notifications } from '@mantine/notifications';
 import { SpotlightProvider } from '@mantine/spotlight';
 import { IconSearch } from '@tabler/icons-react';
-import { Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { DehydratedState, Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { getCookie, setCookie } from 'cookies-next';
 import { GetServerSidePropsContext } from 'next';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { globalStyles } from 'styles/global.styles';
 
-export function App(props: AppProps & { colorScheme: ColorScheme }) {
-  const { Component, pageProps } = props;
-  const queryClient = useRef(new QueryClient());
+export function App(
+  props: AppProps & { colorScheme: ColorScheme; dehydratedState: DehydratedState }
+) {
+  const { Component, pageProps, dehydratedState } = props;
+  const [queryClient] = useState(() => new QueryClient());
   const [colorScheme, setColorScheme] = useState<ColorScheme>(props.colorScheme);
 
   const toggleColorScheme = (value?: ColorScheme) => {
@@ -36,9 +38,9 @@ export function App(props: AppProps & { colorScheme: ColorScheme }) {
         <link rel="shortcut icon" href="/favicon.svg" />
       </Head>
 
-      <QueryClientProvider client={queryClient.current}>
+      <QueryClientProvider client={queryClient}>
         <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
-          <Hydrate state={pageProps.dehydratedState}>
+          <Hydrate state={dehydratedState}>
             <ReactQueryDevtools initialIsOpen={false} />
             <MantineProvider
               theme={{
@@ -87,9 +89,8 @@ export function App(props: AppProps & { colorScheme: ColorScheme }) {
                 searchPlaceholder="Search..."
                 nothingFoundMessage="Nothing found..."
               >
-                <NotificationsProvider>
-                  <Component {...pageProps} />
-                </NotificationsProvider>
+                <Notifications />
+                <Component {...pageProps} />
               </SpotlightProvider>
             </MantineProvider>
           </Hydrate>

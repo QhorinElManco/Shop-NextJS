@@ -6,6 +6,13 @@ export const fadeIn = keyframes({
 });
 
 export const globalStyles = (theme: MantineTheme) => ({
+  // '*': {
+  //   transitionProperty: 'background',
+  //   transitionDuration: '0.5s',
+  //   transitionTimingFunction: 'ease-out',
+  //   transitionDelay: 0,
+  // },
+
   '.header-content': {
     display: 'flex',
     justifyContent: 'space-between',

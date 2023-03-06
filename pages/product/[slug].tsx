@@ -39,7 +39,6 @@ export const ProductPage = () => {
             <SizeSelector
               selectedSize={productQuery.data.sizes[0]}
               sizes={productQuery.data.sizes}
-              mt="xs"
             />
           </Box>
           {/* Cantidad */}
