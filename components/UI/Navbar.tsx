@@ -166,7 +166,7 @@ export const Navbar: FC<Props> = ({ hidden }) => {
                 </Box>
               </Group>
               <ActionIcon variant="transparent" color="brown" size="xl" radius="lg">
-                <IconLogout size={theme.fontSizes.sm * 2} />
+                <IconLogout size="2rem" />
               </ActionIcon>
             </Group>
           </Box>
@@ -176,7 +176,7 @@ export const Navbar: FC<Props> = ({ hidden }) => {
           <Center my="md">
             <Tooltip label="Cerrar sesión">
               <ActionIcon variant="transparent" color="brown" size="xl" radius="lg">
-                <IconLogout size={theme.fontSizes.sm * 2} />
+                <IconLogout size="2rem" />
               </ActionIcon>
             </Tooltip>
           </Center>

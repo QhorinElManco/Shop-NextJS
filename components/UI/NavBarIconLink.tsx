@@ -1,4 +1,4 @@
-import { ActionIcon, Tooltip, useMantineTheme } from '@mantine/core';
+import { ActionIcon, Tooltip } from '@mantine/core';
 import { Icon as TablerIcon } from '@tabler/icons-react';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
@@ -11,7 +11,6 @@ interface Props {
 }
 
 const NavBarIconLink: FC<Props> = ({ icon: Icon, label, href }) => {
-  const theme = useMantineTheme();
   const { asPath } = useRouter();
   return (
     <Tooltip label={label}>
@@ -23,7 +22,7 @@ const NavBarIconLink: FC<Props> = ({ icon: Icon, label, href }) => {
         href={href}
         radius="xl"
       >
-        <Icon size={theme.fontSizes.sm * 2} />
+        <Icon size="1.5rem" />
       </ActionIcon>
     </Tooltip>
   );
