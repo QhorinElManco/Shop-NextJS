@@ -4,7 +4,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { IProduct } from 'interfaces';
 import { fetcher } from 'utils/request';
 
-export const CustomAction = ({
+export const CustomActionComponent = ({
   action,
   styles,
   hovered,
@@ -17,6 +17,7 @@ export const CustomAction = ({
     queryClient.prefetchQuery(['product', action.slug], () =>
       fetcher<IProduct>(`/api/products/${action.slug}`, {})
     );
+
   return (
     <UnstyledButton
       sx={(theme) => ({
@@ -39,21 +40,33 @@ export const CustomAction = ({
       tabIndex={-1}
       onMouseDown={(event) => event.preventDefault()}
       onClick={onTrigger}
-      onMouseEnter={prefetchProduct}
+      onMouseEnter={action?.slug === 'slug_temporal' ? undefined : prefetchProduct}
       {...others}
     >
       <Group noWrap>
         <Image src={`/products/${action.image}`} alt={action.title} width={50} height={50} />
 
-        <div style={{ flex: 1 }}>
-          <Text>{action.title}</Text>
+        {action?.slug === 'see_all_results' ? (
+          <div style={{ flex: 1 }}>
+            <Text>{action.title}</Text>
 
-          {action.price && (
-            <Text size="sm" color="gray">
-              ${action.price}
-            </Text>
-          )}
-        </div>
+            {action.description && (
+              <Text size="sm" color="gray">
+                {action.description}
+              </Text>
+            )}
+          </div>
+        ) : (
+          <div style={{ flex: 1 }}>
+            <Text>{action.title}</Text>
+
+            {action.price && (
+              <Text size="sm" color="gray">
+                ${action.price}
+              </Text>
+            )}
+          </div>
+        )}
       </Group>
     </UnstyledButton>
   );
