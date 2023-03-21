@@ -48,7 +48,6 @@ export const Spotlight: FC<Props> = ({ children }) => {
       cleanQueryOnClose
       query={query}
       onQueryChange={setQuery}
-      highlightQuery
       actionComponent={CustomActionComponent}
       nothingFoundMessage={searchQuery.isLoading ? 'Loading' : 'Nothing found...'}
       onSpotlightClose={() => setActions([])}
