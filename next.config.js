@@ -4,6 +4,9 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 module.exports = withBundleAnalyzer({
   reactStrictMode: false,
+  env: {
+    MONGO_URL: process.env.MONGO_URL,
+  },
   eslint: {
     ignoreDuringBuilds: true,
   },
