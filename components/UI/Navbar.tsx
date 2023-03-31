@@ -6,8 +6,8 @@ import {
   Divider,
   Group,
   Input,
-  MediaQuery,
   Navbar as MantineNavbar,
+  MediaQuery,
   Stack,
   Text,
   Title,
@@ -30,7 +30,7 @@ import {
 } from '@tabler/icons-react';
 import { FC } from 'react';
 import NavBarIconLink from './NavBarIconLink';
-import NavBarLink from './NavBarLink';
+import LinksWithIcons from './NavBarLink';
 
 interface Props {
   hidden: boolean;
@@ -87,7 +87,6 @@ export const Navbar: FC<Props> = ({ hidden }) => {
       hidden={hidden}
       hiddenBreakpoint="sm"
     >
-      {/*<Container mx="md">*/}
       {/* HEADER SECTION */}
 
       <MantineNavbar.Section>
@@ -123,18 +122,25 @@ export const Navbar: FC<Props> = ({ hidden }) => {
       <MantineNavbar.Section my="md" grow>
         <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
           <Box>
-            <NavBarLink icon={IconGardenCart} label="Cart" href="/cart" />
+            <LinksWithIcons icon={IconGardenCart} label="Cart" href="/cart" />
           </Box>
         </MediaQuery>
 
+        {/* Links en pantallas pequeñas */}
         <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
           <Box>
             {listMenu.map((item) => (
-              <NavBarLink icon={item.icon} label={item.label} href={item.href} key={item.label} />
+              <LinksWithIcons
+                icon={item.icon}
+                label={item.label}
+                href={item.href}
+                key={item.label}
+              />
             ))}
           </Box>
         </MediaQuery>
 
+        {/* Links en pantallas grandes */}
         <MediaQuery smallerThan="sm" styles={{ display: 'none' }}>
           <Stack justify="center" align="center" spacing="sm">
             {listMenu.map((item) => (
