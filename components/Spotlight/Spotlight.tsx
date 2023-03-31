@@ -15,7 +15,7 @@ export const Spotlight: FC<Props> = ({ children }) => {
   // Search
   const [query, setQuery] = useState('');
   const { searchQuery } = useSearch(query);
-  const [debounced] = useDebouncedValue(searchQuery.data, 300);
+  const [debounced] = useDebouncedValue(searchQuery.data, 500);
   const [actions, setActions] = useState<SpotlightAction[]>([]);
 
   useEffect(() => {
