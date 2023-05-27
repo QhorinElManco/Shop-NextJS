@@ -62,7 +62,7 @@ MONGO_URL=mongodb://localhost:27017/shopdb
 
 ```
 pnpm install
-yarn dev
+pnpm dev
 ```
 
 ## Llenar la base de datos con información de pruebas
