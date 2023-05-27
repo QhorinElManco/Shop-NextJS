@@ -3,14 +3,15 @@ import {
   Burger,
   Container,
   Group,
-  Header as MantineHeader,
   Indicator,
   Input,
+  Header as MantineHeader,
   MediaQuery,
 } from '@mantine/core';
 import { MantineLogo } from '@mantine/ds';
 import { useSpotlight } from '@mantine/spotlight';
 import { IconGardenCart, IconSearch } from '@tabler/icons-react';
+import { useCart } from 'hooks';
 import NextLink from 'next/link';
 import { Dispatch, FC, SetStateAction } from 'react';
 
@@ -21,6 +22,7 @@ interface Props {
 
 export const Header: FC<Props> = ({ opened, setOpened }) => {
   const spotlight = useSpotlight();
+  const { numberOfItems } = useCart();
   return (
     <MantineHeader height={{ base: 60 }}>
       <Container className="header-content" fluid>
@@ -40,7 +42,14 @@ export const Header: FC<Props> = ({ opened, setOpened }) => {
         <MediaQuery smallerThan="sm" styles={{ display: 'none' }}>
           <Group>
             <NextLink href="/cart" passHref>
-              <Indicator size={12} processing color="red" label={2} inline>
+              <Indicator
+                size={15}
+                processing
+                color="brown.4"
+                label={numberOfItems > 9 ? '+9' : numberOfItems}
+                disabled={numberOfItems === 0}
+                inline
+              >
                 <ActionIcon size="md" color="primary" variant="transparent">
                   <IconGardenCart size={30} />
                 </ActionIcon>

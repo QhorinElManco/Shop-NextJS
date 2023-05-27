@@ -1,22 +1,46 @@
-import { Box, Button, Grid, Text, Title } from '@mantine/core';
-import { dehydrate, QueryClient } from '@tanstack/react-query';
+import { Badge, Box, Button, Grid, Text, Title } from '@mantine/core';
+import { QueryClient, dehydrate } from '@tanstack/react-query';
 import { ShopLayout } from 'components/Layouts';
 import { ProductCarousel, SizeSelector } from 'components/Products';
 import { dbProducts } from 'database';
-import { useProduct } from 'hooks';
+import { useCart, useProduct } from 'hooks';
+import { ICartProduct } from 'interfaces';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import { FullScreenLoading, ItemCounter } from '../../components/UI';
 
 export const ProductPage = () => {
-  const { query } = useRouter();
+  const { query, push: routerPush } = useRouter();
   const { productQuery } = useProduct(query.slug as string);
+  const [tempCartProduct, setTempCartProduct] = useState<ICartProduct | null>(null);
+  const { addProductToCart } = useCart();
+
+  const onAddToCart = () => {
+    if (!tempCartProduct || !tempCartProduct?.size) return;
+    addProductToCart(tempCartProduct);
+    routerPush('/cart');
+  };
+
+  useEffect(() => {
+    if (!productQuery.data) return;
+    setTempCartProduct({
+      _id: productQuery.data._id,
+      image: productQuery.data.images[0],
+      price: productQuery.data.price,
+      size: undefined,
+      slug: productQuery.data.slug,
+      title: productQuery.data.title,
+      gender: productQuery.data.gender,
+      quantity: 1,
+    });
+  }, [productQuery.data]);
 
   if (productQuery.isLoading) {
     return <FullScreenLoading />;
   }
 
-  if (!productQuery.data) {
+  if (!productQuery.data || !tempCartProduct) {
     return <p>Error</p>;
   }
 
@@ -37,20 +61,31 @@ export const ProductPage = () => {
           <Box my="xl">
             <Title order={4}>Size</Title>
             <SizeSelector
-              selectedSize={productQuery.data.sizes[0]}
+              selectedSize={tempCartProduct.size}
               sizes={productQuery.data.sizes}
+              onSelectedSize={(size) => setTempCartProduct({ ...tempCartProduct, size })}
             />
           </Box>
           {/* Cantidad */}
           <Box my="xl">
             <Title order={4}>Quantity</Title>
-            <ItemCounter mt="xs" />
+            <ItemCounter
+              mt="xs"
+              maxValue={productQuery.data.inStock}
+              currentValue={tempCartProduct.quantity}
+              onChangeQuantity={(quantity) => setTempCartProduct({ ...tempCartProduct, quantity })}
+            />
           </Box>
           {/* Agregar al carrito */}
-          <Button fullWidth>Add to cart</Button>
-          {/* <Chip variant="outline" checked={false}>
-            No disponible
-          </Chip> */}
+          {productQuery.data.inStock > 0 ? (
+            <Button fullWidth onClick={onAddToCart}>
+              {tempCartProduct.size ? 'Add to cart' : 'Select a size'}
+            </Button>
+          ) : (
+            <Badge variant="light" size="xl" fullWidth>
+              No disponible
+            </Badge>
+          )}
           {/* Descripción */}
           <Box mt="xl">
             <Title order={4}>Description</Title>

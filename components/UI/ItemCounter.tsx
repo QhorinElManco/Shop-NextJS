@@ -1,24 +1,39 @@
 import { ActionIcon, Group, GroupProps, Text } from '@mantine/core';
-import { useCounter } from '@mantine/hooks';
 import { IconMinus, IconPlus } from '@tabler/icons-react';
 import { FC } from 'react';
 
 interface Props {
-  // stock: number;
+  maxValue?: number;
+  currentValue: number;
+  onChangeQuantity: (value: number) => void;
 }
 
-export const ItemCounter: FC<Props & GroupProps> = ({ ...groupProps }) => {
-  const [count, handlers] = useCounter(4, {
-    min: 0,
-    max: 10,
-  });
+export const ItemCounter: FC<Props & GroupProps> = ({
+  maxValue,
+  currentValue,
+  onChangeQuantity,
+  ...groupProps
+}) => {
+  const handleIncrement = () => {
+    if (maxValue && currentValue >= maxValue) return;
+    onChangeQuantity(currentValue + 1);
+  };
+
+  const handleDecrement = () => {
+    console.log('currentValue', currentValue);
+
+    if (currentValue > 1) {
+      onChangeQuantity(currentValue - 1);
+    }
+  };
+
   return (
     <Group {...groupProps}>
-      <ActionIcon variant="outline" radius="xl" size="sm" onClick={handlers.decrement}>
+      <ActionIcon variant="outline" radius="xl" size="sm" onClick={handleDecrement}>
         <IconMinus />
       </ActionIcon>
-      <Text>{count}</Text>
-      <ActionIcon variant="outline" radius="xl" size="sm" onClick={handlers.increment}>
+      <Text>{currentValue}</Text>
+      <ActionIcon variant="outline" radius="xl" size="sm" onClick={handleIncrement}>
         <IconPlus />
       </ActionIcon>
     </Group>

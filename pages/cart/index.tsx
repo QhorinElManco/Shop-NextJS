@@ -1,6 +1,6 @@
 import { Box, Button, Card, Divider, Grid, Space, Title } from '@mantine/core';
-import { CartList, OrderSummary } from '../../components/cart';
 import { ShopLayout } from '../../components/Layouts';
+import { CartList, OrderSummary } from '../../components/cart';
 
 export const CartPage = () => (
   <ShopLayout title="Cart" description="My cart">

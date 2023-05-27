@@ -9,9 +9,7 @@ type Data =
     }
   | IProduct[];
 
-/**
- * Función para obtener todos los productos
- */
+/** Función para obtener todos los productos */
 const getProducts = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   const { gender = 'all' } = req.query;
 

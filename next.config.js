@@ -3,11 +3,15 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 });
 
 module.exports = withBundleAnalyzer({
-  reactStrictMode: false,
+  reactStrictMode: true,
   env: {
     MONGO_URL: process.env.MONGO_URL,
   },
   eslint: {
     ignoreDuringBuilds: true,
+  },
+  i18n: {
+    locales: ['en', 'es'],
+    defaultLocale: 'en',
   },
 });
