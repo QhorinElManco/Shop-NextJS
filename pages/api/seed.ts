@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { db, seedDatabase } from '../../database';
-import { MProduct } from '../../models';
+import { MProduct, MUser } from '../../models';
 
 type Data = {
   message: string;
@@ -13,7 +13,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
   await db.connect();
 
-  // Si no hay argumentos en deleteMany eliminar todas las entradas del documento
+  // Seed users
+  await MUser.deleteMany(); // Si no hay argumentos en deleteMany eliminar todas las entradas del documento
+  await MUser.insertMany(seedDatabase.initialData.users);
+
+  // Seed products
   await MProduct.deleteMany();
   await MProduct.insertMany(seedDatabase.initialData.products);
 

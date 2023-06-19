@@ -1,6 +1,6 @@
 import { Anchor, Box, Button, Grid, Image, Text, Title } from '@mantine/core';
 import { ItemCounter } from 'components/UI';
-import { useCart } from 'hooks';
+import { useCart } from 'hooks/context';
 import NextLink from 'next/link';
 import { FC } from 'react';
 

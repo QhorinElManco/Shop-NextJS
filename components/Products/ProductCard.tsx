@@ -26,7 +26,7 @@ export const ProductCard: FC<Props> = ({ product }) => {
     );
 
   return (
-    <Grid.Col xs={12} sm={12} md={3} ref={ref}>
+    <Grid.Col md={3} sm={4} xs={12} ref={ref}>
       <Card
         p="md"
         radius="md"

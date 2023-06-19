@@ -1,5 +1,5 @@
 import { SimpleGrid, Text } from '@mantine/core';
-import { useCart } from 'hooks';
+import { useCart } from 'hooks/context';
 
 export const OrderSummary = () => {
   const { total, numberOfItems, tax, subtotal } = useCart();

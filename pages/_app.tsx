@@ -3,7 +3,7 @@ import { Notifications } from '@mantine/notifications';
 import { DehydratedState, Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Spotlight } from 'components/Spotlight';
-import { CartProvider } from 'context';
+import { AuthProvider, CartProvider } from 'context';
 import { getCookie, setCookie } from 'cookies-next';
 import { GetServerSidePropsContext } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
@@ -45,12 +45,14 @@ export function App(
                 withGlobalStyles
                 withNormalizeCSS
               >
-                <CartProvider>
-                  <Notifications />
-                  <Spotlight>
-                    <Component {...pageProps} />
-                  </Spotlight>
-                </CartProvider>
+                <AuthProvider>
+                  <CartProvider>
+                    <Notifications />
+                    <Spotlight>
+                      <Component {...pageProps} />
+                    </Spotlight>
+                  </CartProvider>
+                </AuthProvider>
               </MantineProvider>
             </Hydrate>
           </ColorSchemeProvider>

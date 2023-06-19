@@ -1,10 +1,10 @@
 import { Flex, Grid, Space, Title } from '@mantine/core';
-import { dehydrate, QueryClient } from '@tanstack/react-query';
+import { QueryClient, dehydrate } from '@tanstack/react-query';
 import { ShopLayout } from 'components/Layouts';
 import { ProductList } from 'components/Products';
 import { dbProducts } from 'database';
 
-import { useProducts, useSearch } from 'hooks';
+import { useProducts, useSearch } from 'hooks/queries';
 import { GetServerSideProps } from 'next';
 import { FC } from 'react';
 

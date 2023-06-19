@@ -2,7 +2,7 @@ import { Grid, Space, Title } from '@mantine/core';
 import { ShopLayout } from 'components/Layouts';
 import { ProductList } from 'components/Products';
 import { SkeletonRowProductCard } from 'components/UI/Skeletons';
-import { useProducts } from 'hooks';
+import { useProducts } from 'hooks/queries';
 
 export const HomePage = () => {
   const { productsQuery } = useProducts();

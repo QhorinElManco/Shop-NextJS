@@ -1,7 +1,7 @@
 import { useDebouncedValue } from '@mantine/hooks';
 import { SpotlightAction, SpotlightProvider } from '@mantine/spotlight';
 import { IconSearch } from '@tabler/icons-react';
-import { useSearch } from 'hooks';
+import { useSearch } from 'hooks/queries';
 import { useRouter } from 'next/router';
 import { FC, ReactNode, useEffect, useState } from 'react';
 import { CustomActionComponent } from './CustomAction';

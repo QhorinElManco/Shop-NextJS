@@ -11,7 +11,7 @@ import {
 import { MantineLogo } from '@mantine/ds';
 import { useSpotlight } from '@mantine/spotlight';
 import { IconGardenCart, IconSearch } from '@tabler/icons-react';
-import { useCart } from 'hooks';
+import { useCart } from 'hooks/context';
 import NextLink from 'next/link';
 import { Dispatch, FC, SetStateAction } from 'react';
 
