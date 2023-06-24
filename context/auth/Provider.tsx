@@ -1,7 +1,7 @@
 import { notifications } from '@mantine/notifications';
 import { tesloAPI } from 'api';
 import { AxiosError, isAxiosError } from 'axios';
-import { deleteCookie, setCookie } from 'cookies-next';
+import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 import { FC, useEffect, useReducer } from 'react';
 import { RequestNotControllerError } from 'utils/errors';
 import { AuthContext } from './Context';
@@ -105,6 +105,8 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   };
 
   const checkToken = async (): Promise<boolean> => {
+    if (getCookie('token') === undefined) return false;
+
     try {
       const { data } = await tesloAPI.get<ResponseLogin>('/user/validate-token');
 
@@ -118,6 +120,8 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     } catch (error) {
       deleteCookie('token');
       dispatch({ type: 'Auth - logout' });
+
+      // TODO: Redirect to login page
 
       return false;
     }

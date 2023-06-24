@@ -62,7 +62,6 @@ const adminRoutes = [
     href: '/users',
   },
 ];
-// TODO: CORREGIR PADDING EN NAVBAR
 export const Navbar: FC<Props> = ({ hidden }) => {
   const { user, isLoggedIn } = useAuth();
   const theme = useMantineTheme();

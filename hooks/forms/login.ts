@@ -28,8 +28,6 @@ export const useLogin = () => {
   });
 
   const onLoginError = (errors: typeof loginForm.errors) => {
-    console.log(errors);
-
     notifications.show({
       id: 'login-form',
       message: 'Be sure to fill out the form',
