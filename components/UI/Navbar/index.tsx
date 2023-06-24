@@ -18,10 +18,13 @@ import {
   IconArrowNarrowRight,
   IconCalendarStats,
   IconGardenCart,
+  IconHome,
   IconListDetails,
+  IconLogin,
   IconLogout,
   IconSearch,
   IconUserCircle,
+  IconUserPlus,
   IconUsers,
 } from '@tabler/icons-react';
 import { useAuth } from 'hooks/context';
@@ -31,6 +34,24 @@ import { NavbarLinks } from './NavbarLinks';
 interface Props {
   hidden: boolean;
 }
+
+const guestRoutes = [
+  {
+    icon: IconHome,
+    label: 'Home',
+    href: '/',
+  },
+  {
+    icon: IconLogin,
+    label: 'Login',
+    href: '/auth/login',
+  },
+  {
+    icon: IconUserPlus,
+    label: 'Register',
+    href: 'auth/register',
+  },
+];
 
 const userRoutes = [
   {
@@ -111,10 +132,21 @@ export const Navbar: FC<Props> = ({ hidden }) => {
       {/* BODY SECTION */}
       <MantineNavbar.Section my="md" grow>
         <>
-          {isLoggedIn && (
+          {isLoggedIn ? (
             <>
               <NavbarLinks icon={IconGardenCart} label="Cart" href="/cart" />
               {userRoutes.map((item) => (
+                <NavbarLinks
+                  icon={item.icon}
+                  label={item.label}
+                  href={item.href}
+                  key={item.label}
+                />
+              ))}
+            </>
+          ) : (
+            <>
+              {guestRoutes.map((item) => (
                 <NavbarLinks
                   icon={item.icon}
                   label={item.label}
