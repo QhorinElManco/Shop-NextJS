@@ -1,2 +1,3 @@
-export { useLogin } from './login';
-export { useRegister } from './register';
+export { useLogin } from './useLogin';
+export { useRegister } from './useRegister';
+export { useAddress } from './useAddress';

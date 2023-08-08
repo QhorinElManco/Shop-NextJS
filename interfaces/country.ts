@@ -1,9 +1,7 @@
-export interface IUser {
+export interface ICountry {
   readonly _id: string;
   name: string;
-  email: string;
-  password?: string;
-  role: string;
+  code: string;
   readonly createdAt?: string;
   readonly updatedAt?: string;
 }

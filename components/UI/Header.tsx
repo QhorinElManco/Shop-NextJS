@@ -11,7 +11,7 @@ import {
 import { MantineLogo } from '@mantine/ds';
 import { useSpotlight } from '@mantine/spotlight';
 import { IconGardenCart, IconSearch } from '@tabler/icons-react';
-import { useCart } from 'hooks/context';
+import { useCartContext } from 'hooks/context';
 import NextLink from 'next/link';
 import { Dispatch, FC, SetStateAction } from 'react';
 
@@ -22,7 +22,7 @@ interface Props {
 
 export const Header: FC<Props> = ({ opened, setOpened }) => {
   const spotlight = useSpotlight();
-  const { numberOfItems } = useCart();
+  const { numberOfItems } = useCartContext();
   return (
     <MantineHeader height={{ base: 60 }}>
       <Container className="header-content" fluid>

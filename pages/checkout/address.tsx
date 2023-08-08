@@ -1,94 +1,83 @@
 import { Button, Container, Grid, Select, Space, TextInput, Title } from '@mantine/core';
+import { QueryClient, dehydrate } from '@tanstack/react-query';
 import { ShopLayout } from 'components/Layouts';
+import { dbCountries } from 'database';
+import { GetServerSideProps } from 'next';
 
-const countries = [
-  {
-    value: 'Honduras',
-    label: 'Honduras',
-  },
-  {
-    value: 'El Salvador',
-    label: 'El Salvador',
-  },
-  {
-    value: 'Guatemala',
-    label: 'Guatemala',
-  },
-  {
-    value: 'Nicaragua',
-    label: 'Nicaragua',
-  },
-  {
-    value: 'Costa Rica',
-    label: 'Costa Rica',
-  },
-];
+import { useCountry, useAddress } from '../../hooks';
 
-const regions = [
-  {
-    value: 'Francisco Morazán',
-    label: 'Francisco Morazán',
-  },
-  {
-    value: 'Cortés',
-    label: 'Cortés',
-  },
-];
-const cities = [
-  {
-    value: 'Tegucigalpa',
-    label: 'Tegucigalpa',
-  },
-  {
-    value: 'San Pedro Sula',
-    label: 'San Pedro Sula',
-  },
-];
+type SelectType = {
+  value: string;
+  label: string;
+};
 
-export const AddressPage = () => (
-  <ShopLayout title="Address" description="Confirm your address">
-    <Title order={3}>Address</Title>
-    <Space h="md" />
-    <Container size="sm">
-      <Grid>
-        <Grid.Col xs={12} sm={6}>
-          <TextInput label="First name" withAsterisk />
-        </Grid.Col>
-        <Grid.Col xs={12} sm={6}>
-          <TextInput label="Last name" withAsterisk />
-        </Grid.Col>
+export const AddressPage = () => {
+  const countryQuery = useCountry();
+  const { form, handleError, handleSubmit } = useAddress();
 
-        <Grid.Col xs={12} sm={6}>
-          <TextInput label="Address" withAsterisk />
-        </Grid.Col>
-        <Grid.Col xs={12} sm={6}>
-          <TextInput label="Address 2 (optional)" />
-        </Grid.Col>
+  return (
+    <ShopLayout title="Address" description="Confirm your address">
+      <Title order={3}>Address</Title>
+      <Space h="md" />
+      <form onSubmit={form.onSubmit(handleSubmit, handleError)}>
+        <Container size="sm">
+          <Grid>
+            <Grid.Col xs={12}>
+              <TextInput label="First name" required {...form.getInputProps('firstName')} />
+            </Grid.Col>
+            <Grid.Col xs={12}>
+              <TextInput label="Last name" required {...form.getInputProps('lastName')} />
+            </Grid.Col>
+            <Grid.Col xs={12}>
+              <TextInput label="Address" required {...form.getInputProps('address')} />
+            </Grid.Col>
+            <Grid.Col xs={12}>
+              <TextInput label="Address 2 (Optional)" {...form.getInputProps('address2')} />
+            </Grid.Col>
+            <Grid.Col xs={12}>
+              <Select
+                required
+                searchable
+                label="Country"
+                defaultValue={countryQuery?.data?.[0]?.code ?? ''}
+                data={
+                  countryQuery?.data?.map(
+                    (country): SelectType => ({
+                      value: country.code,
+                      label: country.name,
+                    })
+                  ) ?? []
+                }
+                {...form.getInputProps('country')}
+              />
+            </Grid.Col>
+            <Grid.Col xs={12}>
+              <TextInput label="Postal code" required {...form.getInputProps('postalCode')} />
+            </Grid.Col>
+            <Grid.Col xs={12}>
+              <TextInput label="Phone number" required {...form.getInputProps('phoneNumber')} />
+            </Grid.Col>
+            <Grid.Col xs={12} mt="xl" className="grid-content-center">
+              <Button type="submit">Review order</Button>
+            </Grid.Col>
+          </Grid>
+        </Container>
+      </form>
+    </ShopLayout>
+  );
+};
 
-        <Grid.Col xs={12} sm={6}>
-          <Select label="Country" withAsterisk value="Honduras" data={countries} />
-        </Grid.Col>
-        <Grid.Col xs={12} sm={6}>
-          <Select label="Region" withAsterisk value="Francisco Morazán" data={regions} />
-        </Grid.Col>
+export const getServerSideProps: GetServerSideProps = async () => {
+  const queryClient = new QueryClient();
 
-        <Grid.Col xs={12} sm={6}>
-          <Select label="City" withAsterisk value="Tegucigalpa" data={cities} />
-        </Grid.Col>
-        <Grid.Col xs={12} sm={6}>
-          <TextInput label="Postal Code" withAsterisk />
-        </Grid.Col>
+  await queryClient.fetchQuery({
+    queryKey: ['countries'],
+    queryFn: () => dbCountries.getAllCountries(),
+  });
 
-        <Grid.Col xs={12} sm={6}>
-          <TextInput label="Phone number" withAsterisk />
-        </Grid.Col>
-
-        <Grid.Col xs={12} mt="xl" className="grid-content-center">
-          <Button>Review order</Button>
-        </Grid.Col>
-      </Grid>
-    </Container>
-  </ShopLayout>
-);
+  return {
+    props: { dehydratedState: dehydrate(queryClient) },
+  };
+};
 
 export default AddressPage;

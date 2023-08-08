@@ -5,10 +5,10 @@ export interface UserInfo {
 }
 
 export interface ContextProps {
-  isLoggedIn: boolean;
   user?: UserInfo;
-  loginUser: (email: string, password: string) => Promise<boolean>;
-  registerUser: (values: { name: string; email: string; password: string }) => Promise<boolean>;
+  isLoggedIn: boolean;
+  logoutUser: () => void;
+  registerUser: (values: { name: string; email: string; password: string }) => Promise<void>;
 }
 
 export interface AuthState {

@@ -3,14 +3,14 @@ import { db } from 'database';
 import { MUser } from 'models';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { validations } from 'utils';
-import { signToken } from 'utils/jwt';
+// import { signToken } from 'utils/jwt';
 
 type Response =
   | {
       message: string;
     }
   | {
-      token: string;
+      // token: string;
       user: {
         name: string;
         email: string;
@@ -27,8 +27,7 @@ const registerUser = async (req: NextApiRequest, res: NextApiResponse<Response>)
   if (user) {
     await db.disconnect();
     return res.status(400).json({
-      message:
-        'The Email address is already in use. Please intentional with another email address.',
+      message: 'The email address is already in use. Please proceed with another email address.',
     });
   }
 
@@ -65,14 +64,12 @@ const registerUser = async (req: NextApiRequest, res: NextApiResponse<Response>)
     await db.disconnect();
   } catch (error) {
     await db.disconnect();
-    console.log(error);
     return res.status(500).json({
       message: "Couldn't create user. Please try again later.",
     });
   }
 
   return res.status(200).json({
-    token: signToken({ _id: newUser._id, email }),
     user: {
       name: newUser.name,
       email: newUser.email,

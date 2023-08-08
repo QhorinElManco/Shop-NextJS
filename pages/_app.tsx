@@ -6,16 +6,21 @@ import { Spotlight } from 'components/Spotlight';
 import { AuthProvider, CartProvider } from 'context';
 import { getCookie, setCookie } from 'cookies-next';
 import { GetServerSidePropsContext } from 'next';
-import { NextIntlClientProvider } from 'next-intl';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useState } from 'react';
 import { configTheme } from 'styles/theme.config';
+import { SessionProvider } from 'next-auth/react';
+import { Session } from 'next-auth';
 
-export function App(
-  props: AppProps & { colorScheme: ColorScheme; dehydratedState: DehydratedState }
-) {
-  const { Component, pageProps, dehydratedState } = props;
+interface Props extends AppProps {
+  colorScheme: ColorScheme;
+  dehydratedState: DehydratedState;
+  session: Session;
+}
+
+export function App(props: Props) {
+  const { Component, pageProps, dehydratedState, session } = props;
   const [queryClient] = useState(() => new QueryClient());
   const [colorScheme, setColorScheme] = useState<ColorScheme>(props.colorScheme);
 
@@ -32,7 +37,7 @@ export function App(
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
         <link rel="shortcut icon" href="/favicon.svg" />
       </Head>
-      <NextIntlClientProvider>
+      <SessionProvider session={session}>
         <QueryClientProvider client={queryClient}>
           <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
             <Hydrate state={dehydratedState}>
@@ -57,7 +62,7 @@ export function App(
             </Hydrate>
           </ColorSchemeProvider>
         </QueryClientProvider>
-      </NextIntlClientProvider>
+      </SessionProvider>
     </>
   );
 }

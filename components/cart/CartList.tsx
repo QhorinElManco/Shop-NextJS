@@ -1,6 +1,6 @@
 import { Anchor, Box, Button, Grid, Image, Text, Title } from '@mantine/core';
 import { ItemCounter } from 'components/UI';
-import { useCart } from 'hooks/context';
+import { useCartContext } from 'hooks/context';
 import NextLink from 'next/link';
 import { FC } from 'react';
 
@@ -9,7 +9,7 @@ interface Props {
 }
 
 export const CartList: FC<Props> = ({ editable = false }) => {
-  const { cart, updateProductQuantity, deleteProductFromCart } = useCart();
+  const { cart, updateProductQuantity, deleteProductFromCart } = useCartContext();
   return (
     <>
       {cart.map((product) => (

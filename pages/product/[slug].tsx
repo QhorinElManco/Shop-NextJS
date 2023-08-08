@@ -3,7 +3,7 @@ import { QueryClient, dehydrate } from '@tanstack/react-query';
 import { ShopLayout } from 'components/Layouts';
 import { ProductCarousel, SizeSelector } from 'components/Products';
 import { dbProducts } from 'database';
-import { useCart } from 'hooks/context';
+import { useCartContext } from 'hooks/context';
 import { useProduct } from 'hooks/queries';
 import { ICartProduct } from 'interfaces';
 import { GetStaticPaths, GetStaticProps } from 'next';
@@ -11,16 +11,20 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { FullScreenLoading, ItemCounter } from '../../components/UI';
 
-export const ProductPage = () => {
-  const { query, push: routerPush } = useRouter();
-  const { productQuery } = useProduct(query.slug as string);
+interface ProductPageProps {
+  slug: string;
+}
+
+export const ProductPage = ({ slug }: ProductPageProps) => {
+  const router = useRouter();
+  const { addProductToCart } = useCartContext();
+  const { productQuery } = useProduct(slug);
   const [tempCartProduct, setTempCartProduct] = useState<ICartProduct | null>(null);
-  const { addProductToCart } = useCart();
 
   const onAddToCart = () => {
     if (!tempCartProduct || !tempCartProduct?.size) return;
     addProductToCart(tempCartProduct);
-    routerPush('/cart');
+    router.push('/cart').then();
   };
 
   useEffect(() => {
@@ -134,6 +138,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
+      slug,
     },
     revalidate: 60 * 60 * 24,
   };

@@ -1,12 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { db, seedDatabase } from '../../database';
-import { MProduct, MUser } from '../../models';
+import { MCountry, MProduct, MUser } from '../../models';
 
 type Data = {
   message: string;
 };
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
+export default async function handler(_: NextApiRequest, res: NextApiResponse<Data>) {
   if (process.env.NODE_ENV === 'production') {
     return res.status(401).json({ message: 'Not authorized' });
   }
@@ -20,6 +20,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   // Seed products
   await MProduct.deleteMany();
   await MProduct.insertMany(seedDatabase.initialData.products);
+
+  // Seed countries
+  await MCountry.deleteMany();
+  await MCountry.insertMany(seedDatabase.initialData.countries);
 
   await db.disconnect();
 

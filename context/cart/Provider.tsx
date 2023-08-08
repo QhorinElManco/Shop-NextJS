@@ -1,20 +1,24 @@
 import { getCookie, setCookie } from 'cookies-next';
-import { ICartProduct } from 'interfaces';
-import { FC, useEffect, useReducer } from 'react';
+import { ICartProduct, IShippingAddress } from 'interfaces';
+import { FC, useEffect, useReducer, useRef } from 'react';
+import { cookieHelper } from 'utils';
 import { CartContext } from './Context';
 import { cartReducer } from './Reducer';
 import { CartProviderProps, CartState } from './types';
 
 const CART_INITIAL_STATE: CartState = {
-  cart: [],
+  isLoaded: false,
+  cart: getCookie('cart') ? JSON.parse(getCookie('cart') as string) : [],
   numberOfItems: 0,
   subtotal: 0,
   tax: 0,
   total: 0,
+  shippingAddress: undefined,
 };
 
 export const CartProvider: FC<CartProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(cartReducer, CART_INITIAL_STATE);
+  const firstTimeLoad = useRef(true);
 
   const addProductToCart = (product: ICartProduct) => {
     const isProductInCart = state.cart.find((p) => product._id === p._id);
@@ -31,7 +35,7 @@ export const CartProvider: FC<CartProviderProps> = ({ children }) => {
     );
 
     if (productInCartSameSize) {
-      const updatedProductsInCart = state.cart.map((productInCart) => {
+      const updatedProductsInCart: ICartProduct[] = state.cart.map((productInCart) => {
         if (productInCart._id === product._id && productInCart.size === product.size) {
           return {
             ...productInCart,
@@ -67,20 +71,46 @@ export const CartProvider: FC<CartProviderProps> = ({ children }) => {
     });
   };
 
+  const updateShippingAddress = (shippingAddress: IShippingAddress) => {
+    cookieHelper.saveAddressToCookies(shippingAddress);
+    dispatch({
+      type: 'Cart - Update shipping address',
+      payload: shippingAddress,
+    });
+  };
+
   useEffect(() => {
-    const cookiesProducts = getCookie('cart');
+    const shippingAddress = cookieHelper.getAddressFromCookies();
 
-    if (cookiesProducts && typeof cookiesProducts === 'string') {
-      const products = JSON.parse(cookiesProducts);
-
-      dispatch({
-        type: 'Cart - Reload cart from cookies | storage',
-        payload: products,
-      });
-    }
+    dispatch({
+      type: 'Cart - Load shipping address from cookies | storage',
+      payload: shippingAddress,
+    });
   }, []);
 
   useEffect(() => {
+    let products: ICartProduct[] = [];
+    const cookiesProducts = getCookie('cart');
+
+    if (cookiesProducts && typeof cookiesProducts === 'string' && JSON.parse(cookiesProducts)) {
+      products = JSON.parse(cookiesProducts);
+    }
+
+    firstTimeLoad.current = false;
+
+    dispatch({
+      type: 'Cart - Load cart from cookies | storage',
+      payload: products,
+    });
+  }, []);
+
+  useEffect(() => {
+    if (firstTimeLoad.current) {
+      firstTimeLoad.current = false;
+      if (state.cart.length === 0) {
+        return;
+      }
+    }
     setCookie('cart', JSON.stringify(state.cart));
   }, [state.cart]);
 
@@ -112,6 +142,7 @@ export const CartProvider: FC<CartProviderProps> = ({ children }) => {
         addProductToCart,
         updateProductQuantity,
         deleteProductFromCart,
+        updateShippingAddress,
       }}
     >
       {children}

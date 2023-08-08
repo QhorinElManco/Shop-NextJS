@@ -1,10 +1,15 @@
 import { Anchor, Box, Button, Grid, TextInput, Title } from '@mantine/core';
 import { useRegister } from 'hooks/forms';
 import NextLink from 'next/link';
+import { useRouter } from 'next/router';
+import { GetServerSideProps } from 'next';
+import { getServerSession } from 'next-auth';
 import { AuthLayout } from '../../components/Layouts';
+import { authOptions } from '../api/auth/[...nextauth]';
 
 const RegisterPage = () => {
   const { registerForm, onRegister, onRegisterError, isLoading } = useRegister();
+  const router = useRouter();
   return (
     <AuthLayout title="Login">
       <Box w={350} p={20}>
@@ -42,7 +47,12 @@ const RegisterPage = () => {
               </Button>
             </Grid.Col>
             <Grid.Col xs={12} ta="right">
-              <Anchor component={NextLink} href="/auth/login" size="sm" underline>
+              <Anchor
+                component={NextLink}
+                href={router.query.p ? `/auth/login?p=${router.query.p}` : '/auth/login'}
+                size="sm"
+                underline
+              >
                 Already have an account?
               </Anchor>
             </Grid.Col>
@@ -51,6 +61,24 @@ const RegisterPage = () => {
       </Box>
     </AuthLayout>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res, query }) => {
+  const session = await getServerSession(req, res, authOptions);
+  const { p = '/' } = query;
+
+  if (session) {
+    return {
+      redirect: {
+        destination: p as string,
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
 };
 
 export default RegisterPage;

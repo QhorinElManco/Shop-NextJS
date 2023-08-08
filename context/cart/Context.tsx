@@ -1,4 +1,4 @@
 import { createContext } from 'react';
-import { ContextProps } from './types';
+import { CartContextValues } from './types';
 
-export const CartContext = createContext({} as ContextProps);
+export const CartContext = createContext({} as CartContextValues);

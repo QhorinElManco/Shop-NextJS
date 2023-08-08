@@ -61,7 +61,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     };
   }
 
-  let products = await queryClient.fetchQuery({
+  const products = await queryClient.fetchQuery({
     queryKey: ['search results', { query }],
     queryFn: () => dbProducts.getProductsBySearch(query),
   });
@@ -69,7 +69,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const foundProducts = products.length > 0;
 
   if (!foundProducts) {
-    products = await queryClient.fetchQuery({
+    await queryClient.fetchQuery({
       queryKey: ['products'],
       queryFn: () => dbProducts.getAllProducts(),
     });

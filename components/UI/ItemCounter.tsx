@@ -20,8 +20,6 @@ export const ItemCounter: FC<Props & GroupProps> = ({
   };
 
   const handleDecrement = () => {
-    console.log('currentValue', currentValue);
-
     if (currentValue > 1) {
       onChangeQuantity(currentValue - 1);
     }

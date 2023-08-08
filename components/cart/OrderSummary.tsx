@@ -1,8 +1,8 @@
 import { SimpleGrid, Text } from '@mantine/core';
-import { useCart } from 'hooks/context';
+import { useCartContext } from 'hooks/context';
 
 export const OrderSummary = () => {
-  const { total, numberOfItems, tax, subtotal } = useCart();
+  const { total, numberOfItems, tax, subtotal } = useCartContext();
   // TODO: Agregar formato de moneda con next-intl
   return (
     <>

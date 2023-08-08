@@ -1,12 +1,15 @@
 import { notifications } from '@mantine/notifications';
 import { tesloAPI } from 'api';
-import { AxiosError, isAxiosError } from 'axios';
-import { deleteCookie, getCookie, setCookie } from 'cookies-next';
-import { FC, useEffect, useReducer } from 'react';
+import { isAxiosError } from 'axios';
+import { useRouter } from 'next/router';
+import { FC, ReactNode, useEffect, useReducer } from 'react';
 import { RequestNotControllerError } from 'utils/errors';
+import { useSession, signOut } from 'next-auth/react';
+import { cookieHelper } from 'utils';
 import { AuthContext } from './Context';
 import { authReducer } from './Reducer';
 import { AuthState } from './types';
+import { IUser } from '../../interfaces';
 
 type ResponseLogin =
   | {
@@ -27,56 +30,21 @@ const AUTH_INITIAL_STATE: AuthState = {
 };
 
 interface AuthProviderProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
+  const router = useRouter();
+  const { data: sessionData, status } = useSession();
   const [state, dispatch] = useReducer(authReducer, AUTH_INITIAL_STATE);
-
-  const loginUser = async (email: string, password: string): Promise<boolean> => {
-    try {
-      const { data } = await tesloAPI.post<ResponseLogin>('/user/login', { email, password });
-
-      if ('token' in data) {
-        const { token, user } = data;
-        setCookie('token', token);
-        dispatch({ type: 'Auth - login', payload: user });
-      }
-
-      return true;
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        if (error.response?.status === 401) {
-          const { data } = error.response;
-          const { message } = data;
-
-          notifications.show({
-            id: 'login-form',
-            message,
-            color: 'red',
-            autoClose: false,
-          });
-        }
-      }
-      return false;
-    }
-  };
 
   const registerUser = async (values: {
     name: string;
     email: string;
     password: string;
-  }): Promise<boolean> => {
+  }): Promise<void> => {
     try {
-      const { data } = await tesloAPI.post<ResponseLogin>('/user/register', values);
-
-      if ('token' in data) {
-        const { token, user } = data;
-        setCookie('token', token);
-        dispatch({ type: 'Auth - login', payload: user });
-      }
-
-      return true;
+      await tesloAPI.post<ResponseLogin>('/user/register', values);
     } catch (error) {
       if (isAxiosError(error)) {
         if (error.response?.status === 400) {
@@ -90,7 +58,6 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
             autoClose: false,
           });
         }
-        return false;
       }
 
       notifications.show({
@@ -104,39 +71,24 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const checkToken = async (): Promise<boolean> => {
-    if (getCookie('token') === undefined) return false;
-
-    try {
-      const { data } = await tesloAPI.get<ResponseLogin>('/user/validate-token');
-
-      if ('token' in data) {
-        const { token, user } = data;
-        setCookie('token', token);
-        dispatch({ type: 'Auth - login', payload: user });
-      }
-
-      return true;
-    } catch (error) {
-      deleteCookie('token');
-      dispatch({ type: 'Auth - logout' });
-
-      // TODO: Redirect to login page
-
-      return false;
-    }
+  const logoutUser = async () => {
+    cookieHelper.clearAddressCookies();
+    await signOut();
+    router.reload(); // Hace un refresh de la página para limpiar el estado
   };
 
   useEffect(() => {
-    checkToken();
-  }, []);
+    if (status === 'authenticated') {
+      dispatch({ type: 'Auth - login', payload: sessionData?.user as IUser });
+    }
+  }, [status, sessionData]);
 
   return (
     <AuthContext.Provider
       value={{
         ...state,
         // methods
-        loginUser,
+        logoutUser,
         registerUser,
       }}
     >

@@ -1,12 +1,11 @@
 import { TransformedValues, hasLength, isEmail, useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
-import { useAuth } from 'hooks/context';
-import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/router';
 
 export const useLogin = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const { loginUser } = useAuth();
   const router = useRouter();
   const loginForm = useForm({
     validateInputOnChange: true,
@@ -27,7 +26,8 @@ export const useLogin = () => {
     }),
   });
 
-  const onLoginError = (errors: typeof loginForm.errors) => {
+  // (errors: typeof loginForm.errors)
+  const onLoginError = () => {
     notifications.show({
       id: 'login-form',
       message: 'Be sure to fill out the form',
@@ -37,20 +37,34 @@ export const useLogin = () => {
 
   const onLogin = async ({ email, password }: TransformedValues<typeof loginForm>) => {
     setIsLoading(true);
-    const isValidLogin = await loginUser(email, password);
 
-    if (!isValidLogin) {
-      setIsLoading(false);
+    const result = await signIn('credentials', {
+      email,
+      password,
+      redirect: false,
+    });
+
+    if (result?.ok) {
+      await router.push(router.query?.p?.toString() || '/');
       return;
     }
 
-    router.replace('/');
+    if (result?.error) {
+      notifications.show({
+        id: 'login-form',
+        message: 'Login failed. Check your credentials.',
+        color: 'red',
+      });
+    }
+
+    setIsLoading(false);
   };
 
   return {
     loginForm,
-    onLoginError,
-    onLogin,
     isLoading,
+    // methods
+    onLogin,
+    onLoginError,
   };
 };

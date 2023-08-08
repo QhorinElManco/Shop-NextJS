@@ -13,6 +13,8 @@ interface Props {
 export const NavbarLinks: FC<Props> = ({ icon: Icon, label, href }) => {
   const { asPath } = useRouter();
   const active = asPath === href;
+
+  // TODO: Agregar Stack para cargar tanto el DOM
   return (
     <>
       <Stack justify="center" align="center" spacing="sm">

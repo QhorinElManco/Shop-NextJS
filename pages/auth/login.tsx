@@ -1,10 +1,28 @@
-import { Anchor, Box, Button, Grid, TextInput, Title } from '@mantine/core';
+import { Anchor, Box, Button, Divider, Grid, TextInput, Title } from '@mantine/core';
 import { useLogin } from 'hooks/forms';
 import NextLink from 'next/link';
-import { AuthLayout } from '../../components/Layouts';
+import { useRouter } from 'next/router';
+import { AuthLayout } from 'components/Layouts';
+import { GetServerSideProps } from 'next';
+import { getServerSession } from 'next-auth';
+import { useEffect, useState } from 'react';
+import { ClientSafeProvider, getProviders, LiteralUnion, signIn } from 'next-auth/react';
+import { BuiltInProviderType } from 'next-auth/providers';
+import { authOptions } from '../api/auth/[...nextauth]';
+
+type Providers = Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider> | null;
 
 const LoginPage = () => {
-  const { loginForm, onLogin, onLoginError, isLoading } = useLogin();
+  const router = useRouter();
+  const { loginForm, onLoginError, isLoading, onLogin } = useLogin();
+  const [providers, setProviders] = useState<Providers>(null);
+
+  useEffect(() => {
+    getProviders().then((prov) => {
+      setProviders(prov);
+    });
+  }, []);
+
   return (
     <AuthLayout title="Login">
       <form onSubmit={loginForm.onSubmit(onLogin, onLoginError)}>
@@ -35,10 +53,30 @@ const LoginPage = () => {
               </Button>
             </Grid.Col>
             <Grid.Col xs={12} ta="right">
-              {/* TODO: Agregar link para register */}
-              <Anchor component={NextLink} href="/auth/register" size="sm" underline>
+              <Anchor
+                component={NextLink}
+                href={router.query.p ? `/auth/register?p=${router.query.p}` : '/auth/register'}
+                size="sm"
+                underline
+              >
                 You do not have an account yet
               </Anchor>
+            </Grid.Col>
+            <Grid.Col xs={12}>
+              <Divider orientation="horizontal" />
+              {providers &&
+                Object.values(providers)
+                  .filter((provider) => provider.type !== 'credentials')
+                  .map((provider) => (
+                    <Button
+                      mb="xs"
+                      fullWidth
+                      key={provider.name}
+                      onClick={() => signIn(provider.id).then()}
+                    >
+                      {`Sign in with ${provider.name}`}
+                    </Button>
+                  ))}
             </Grid.Col>
           </Grid>
         </Box>
@@ -48,3 +86,21 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res, query }) => {
+  const session = await getServerSession(req, res, authOptions);
+  const { p = '/' } = query;
+
+  if (session) {
+    return {
+      redirect: {
+        destination: p as string,
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+};
