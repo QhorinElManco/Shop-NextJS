@@ -35,6 +35,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Data>)
     case 'GET':
       return searchProducts(req, res);
     default:
-      return res.status(400).json({ message: 'Bad request' });
+      return res.status(405).json({ message: 'Method not allowed' });
   }
 }
