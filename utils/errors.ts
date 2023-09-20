@@ -1,21 +1,17 @@
-/* eslint-disable max-classes-per-file */
-export class TokenValidationError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = 'TokenValidationError';
-  }
+function createCustomError(name: string) {
+  return class extends Error {
+    constructor(message?: string) {
+      super(message);
+      this.name = name;
+    }
+  };
 }
 
-export class EnvironmentVariableNotDefinedError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = 'EnvironmentVariableNotDefinedError';
-  }
-}
-
-export class RequestNotControllerError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = 'RequestNotControllerError';
-  }
-}
+export const TokenValidationError = createCustomError('TokenValidationError');
+export const EnvironmentVariableNotDefinedError = createCustomError(
+  'EnvironmentVariableNotDefinedError'
+);
+export const RequestNotControllerError = createCustomError('RequestNotControllerError');
+export const InvalidShippingAddress = createCustomError('InvalidShippingAddress');
+export const ProductDoesNotExist = createCustomError('ProductDoesNotExist');
+export const TotalDoesNotMatch = createCustomError('TotalDoesNotMatch');
