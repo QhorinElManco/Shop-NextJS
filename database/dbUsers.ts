@@ -2,6 +2,12 @@ import bcrypt from 'bcryptjs';
 import { db } from 'database';
 import { MUser } from '../models';
 
+export const getUserByEmail = async (email: string) => {
+  await db.connect();
+  const user = await MUser.findOne({ email });
+  await db.disconnect();
+  return user;
+};
 export const checkUserEmailAndPassword = async (email: string, password: string) => {
   await db.connect();
   const user = await MUser.findOne({ email });
