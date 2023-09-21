@@ -1,10 +1,12 @@
 import { getCookie, setCookie } from 'cookies-next';
-import { ICartProduct, IShippingAddress } from 'interfaces';
+import { ICartProduct, IOrder, IShippingAddress } from 'interfaces';
 import { FC, useEffect, useReducer, useRef } from 'react';
 import { cookieHelper } from 'utils';
 import { CartContext } from './Context';
 import { cartReducer } from './Reducer';
 import { CartProviderProps, CartState } from './types';
+import { tesloAPI } from '../../api';
+import { InvalidShippingAddress } from '../../utils/errors';
 
 const CART_INITIAL_STATE: CartState = {
   isLoaded: false,
@@ -79,6 +81,30 @@ export const CartProvider: FC<CartProviderProps> = ({ children }) => {
     });
   };
 
+  const createOrder = async () => {
+    if (!state.shippingAddress) {
+      throw new InvalidShippingAddress('Shipping address is not defined');
+    }
+
+    const body: IOrder = {
+      isPaid: false,
+      numberOfItems: state.numberOfItems,
+      orderItems: state.cart.map((product) => ({ ...product, size: product.size! })),
+      shippingAddress: state.shippingAddress,
+      subtotal: state.subtotal,
+      tax: state.tax,
+      total: state.total,
+    };
+
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { data } = await tesloAPI.post('/orders', body);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     const shippingAddress = cookieHelper.getAddressFromCookies();
 
@@ -143,6 +169,7 @@ export const CartProvider: FC<CartProviderProps> = ({ children }) => {
         updateProductQuantity,
         deleteProductFromCart,
         updateShippingAddress,
+        createOrder,
       }}
     >
       {children}

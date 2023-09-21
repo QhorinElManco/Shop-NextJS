@@ -10,22 +10,23 @@ import { useCartContext, useCountry } from '../../hooks';
 export const SummaryPage = () => {
   const router = useRouter();
   const countryQuery = useCountry();
-  const { shippingAddress, numberOfItems } = useCartContext();
+  const { shippingAddress, numberOfItems, createOrder } = useCartContext();
+  const countryName =
+    countryQuery?.data?.find((c) => c.code === shippingAddress?.country)?.name ?? '';
 
-  if (!shippingAddress) {
-    return <></>;
-  }
-
-  const { firstName, lastName, address, address2, postalCode, country, phoneNumber } =
-    shippingAddress;
-
-  const countryName = countryQuery?.data?.find((c) => c.code === country)?.name ?? '';
+  const onCreateOrder = async () => {
+    await createOrder();
+  };
 
   useEffect(() => {
     if (!getCookie('firstName')) {
       router.push('/checkout/address').then();
     }
   }, []);
+
+  if (!shippingAddress) {
+    return <></>;
+  }
 
   return (
     <ShopLayout title="Order summary" description="Order summary">
@@ -55,14 +56,14 @@ export const SummaryPage = () => {
             </Group>
 
             <Text mt={5}>
-              {firstName} {lastName}
+              {shippingAddress?.firstName} {shippingAddress?.lastName}
             </Text>
-            <Text mt={5}>{address}</Text>
+            <Text mt={5}>{shippingAddress?.address}</Text>
             <Text mt={5}>
-              {address2} {postalCode}
+              {shippingAddress?.address2} {shippingAddress?.postalCode}
             </Text>
             <Text mt={5}>{countryName}</Text>
-            <Text mt={5}>{phoneNumber}</Text>
+            <Text mt={5}>{shippingAddress?.phoneNumber}</Text>
 
             <Divider my="md" />
 
@@ -75,7 +76,7 @@ export const SummaryPage = () => {
             <OrderSummary />
 
             <Box mt="xl">
-              <Button size="xs" fullWidth>
+              <Button size="xs" fullWidth onClick={onCreateOrder}>
                 Confirm order
               </Button>
             </Box>

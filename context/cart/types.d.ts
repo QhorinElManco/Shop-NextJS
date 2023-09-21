@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { IShippingAddress } from '../../interfaces';
+import { ICartProduct, IShippingAddress } from '../../interfaces';
 
 export interface CartProviderProps {
   children: ReactNode;
@@ -20,4 +20,5 @@ export interface CartContextValues extends CartState {
   updateProductQuantity: (product: ICartProduct) => void;
   deleteProductFromCart: (product: ICartProduct) => void;
   updateShippingAddress: (address: IShippingAddress) => void;
+  createOrder: () => Promise<void>;
 }
