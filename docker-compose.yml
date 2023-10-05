@@ -1,7 +1,7 @@
 services:
   shopdb:
     image: mongo:6.0.3
-    restart: always
+    restart: no
     container_name: shop-database
     ports:
       - 27017:27017
