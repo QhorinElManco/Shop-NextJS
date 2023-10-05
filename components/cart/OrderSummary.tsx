@@ -1,10 +1,22 @@
 import { SimpleGrid, Text } from '@mantine/core';
-import { useCartContext } from 'hooks/context';
+import { useCartContext } from 'hooks';
+import { FC } from 'react';
 
-export const OrderSummary = () => {
-  const { total, numberOfItems, tax, subtotal } = useCartContext();
-  // TODO: Agregar formato de moneda con next-intl
+interface OrderSummaryProps {
+  order?: {
+    total: number;
+    numberOfItems: number;
+    tax: number;
+    subtotal: number;
+  };
+}
+
+export const OrderSummary: FC<OrderSummaryProps> = ({ order }) => {
+  const orderValuesFromContext = useCartContext();
+  const { total, numberOfItems, tax, subtotal } = order || orderValuesFromContext;
+
   return (
+    // TODO: Agregar formato de moneda con next-intl
     <>
       <SimpleGrid cols={2}>
         <Text>No. Products</Text>

@@ -1,12 +1,13 @@
+import axios from 'axios';
 import { getCookie, setCookie } from 'cookies-next';
 import { ICartProduct, IOrder, IShippingAddress } from 'interfaces';
 import { FC, useEffect, useReducer, useRef } from 'react';
 import { cookieHelper } from 'utils';
+import { tesloAPI } from '../../api';
+import { InvalidShippingAddress } from '../../utils/errors';
 import { CartContext } from './Context';
 import { cartReducer } from './Reducer';
 import { CartProviderProps, CartState } from './types';
-import { tesloAPI } from '../../api';
-import { InvalidShippingAddress } from '../../utils/errors';
 
 const CART_INITIAL_STATE: CartState = {
   isLoaded: false,
@@ -81,7 +82,7 @@ export const CartProvider: FC<CartProviderProps> = ({ children }) => {
     });
   };
 
-  const createOrder = async () => {
+  const createOrder = async (): Promise<{ hasError: boolean; message: string }> => {
     if (!state.shippingAddress) {
       throw new InvalidShippingAddress('Shipping address is not defined');
     }
@@ -97,11 +98,23 @@ export const CartProvider: FC<CartProviderProps> = ({ children }) => {
     };
 
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { data } = await tesloAPI.post('/orders', body);
+      const { data } = await tesloAPI.post<IOrder>('/orders', body);
+      dispatch({ type: 'Cart - Order completed' });
+      return {
+        hasError: false,
+        message: data._id!,
+      };
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.log(error);
+      if (axios.isAxiosError(error)) {
+        return {
+          hasError: true,
+          message: error.response?.data?.message,
+        };
+      }
+      return {
+        hasError: true,
+        message: 'Error not handled, please contact the administrator',
+      };
     }
   };
 

@@ -69,7 +69,7 @@ export const Navbar: FC<Props> = ({ hidden }) => {
     {
       icon: IconListDetails,
       label: 'My orders',
-      href: '/analytics',
+      href: '/orders/history',
     },
   ];
 

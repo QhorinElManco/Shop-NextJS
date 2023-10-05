@@ -1,21 +1,46 @@
-import { Anchor, Box, Button, Card, Divider, Grid, Group, Space, Text, Title } from '@mantine/core';
-import NextLink from 'next/link';
-import { useEffect } from 'react';
+import {
+  Alert,
+  Anchor,
+  Box,
+  Button,
+  Card,
+  Divider,
+  Flex,
+  Grid,
+  Group,
+  Space,
+  Text,
+  Title,
+} from '@mantine/core';
+import { IconAlertCircle } from '@tabler/icons-react';
 import { getCookie } from 'cookies-next';
+import NextLink from 'next/link';
 import { useRouter } from 'next/router';
-import { CartList, OrderSummary } from '../../components/cart';
+import { useEffect, useState } from 'react';
 import { ShopLayout } from '../../components/Layouts';
+import { CartList, OrderSummary } from '../../components/cart';
 import { useCartContext, useCountry } from '../../hooks';
 
 export const SummaryPage = () => {
   const router = useRouter();
   const countryQuery = useCountry();
   const { shippingAddress, numberOfItems, createOrder } = useCartContext();
+  const [isPosting, setIsPosting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const countryName =
     countryQuery?.data?.find((c) => c.code === shippingAddress?.country)?.name ?? '';
 
   const onCreateOrder = async () => {
-    await createOrder();
+    setIsPosting(true);
+    const { hasError, message } = await createOrder();
+
+    if (hasError) {
+      setErrorMessage(message);
+      setIsPosting(false);
+      return;
+    }
+
+    router.replace(`/orders/${message}`);
   };
 
   useEffect(() => {
@@ -75,11 +100,20 @@ export const SummaryPage = () => {
 
             <OrderSummary />
 
-            <Box mt="xl">
-              <Button size="xs" fullWidth onClick={onCreateOrder}>
+            <Flex mt="xl" direction="column" gap="md">
+              {errorMessage && (
+                <Alert
+                  icon={<IconAlertCircle size="1rem" />}
+                  title="Oops, an error has occurred!"
+                  color="red"
+                >
+                  {errorMessage}
+                </Alert>
+              )}
+              <Button size="xs" fullWidth onClick={onCreateOrder} disabled={isPosting}>
                 Confirm order
               </Button>
-            </Box>
+            </Flex>
           </Card>
         </Grid.Col>
       </Grid>

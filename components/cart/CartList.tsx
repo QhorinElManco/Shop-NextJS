@@ -1,18 +1,24 @@
 import { Anchor, Box, Button, Grid, Image, Text, Title } from '@mantine/core';
 import { ItemCounter } from 'components/UI';
 import { useCartContext } from 'hooks/context';
+import { ICartProduct, IOrderItem } from 'interfaces';
 import NextLink from 'next/link';
 import { FC } from 'react';
 
 interface Props {
   editable?: boolean;
+  products?: IOrderItem[];
 }
 
-export const CartList: FC<Props> = ({ editable = false }) => {
+export const CartList: FC<Props> = ({ editable = false, products = [] }) => {
   const { cart, updateProductQuantity, deleteProductFromCart } = useCartContext();
+
+  const productsToShow = products.length > 0 ? products : cart;
+  const _editable = products.length > 0 ? false : editable;
+
   return (
     <>
-      {cart.map((product) => (
+      {productsToShow.map((product) => (
         <Grid gutter="sm" key={`${product.slug} - ${product.size}`}>
           <Grid.Col xs={2}>
             <Anchor component={NextLink} href={`product/${product.slug}`}>
@@ -32,12 +38,12 @@ export const CartList: FC<Props> = ({ editable = false }) => {
               <Text>
                 Size: <strong>{product.size}</strong>
               </Text>
-              {editable ? (
+              {_editable ? (
                 <ItemCounter
                   mt="xs"
                   currentValue={product.quantity}
                   onChangeQuantity={(quantity) => {
-                    updateProductQuantity({ ...product, quantity });
+                    updateProductQuantity({ ...product, quantity } as ICartProduct);
                   }}
                 />
               ) : (
@@ -49,11 +55,11 @@ export const CartList: FC<Props> = ({ editable = false }) => {
           </Grid.Col>
           <Grid.Col xs={2} className="grid-content-center">
             <Text>{`$${product.price}`}</Text>
-            {editable && (
+            {_editable && (
               <Button
                 size="xs"
                 variant="subtle"
-                onClick={() => deleteProductFromCart(product)}
+                onClick={() => deleteProductFromCart(product as ICartProduct)}
                 compact
               >
                 Remove

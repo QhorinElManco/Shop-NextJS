@@ -20,5 +20,5 @@ export interface CartContextValues extends CartState {
   updateProductQuantity: (product: ICartProduct) => void;
   deleteProductFromCart: (product: ICartProduct) => void;
   updateShippingAddress: (address: IShippingAddress) => void;
-  createOrder: () => Promise<void>;
+  createOrder: () => Promise<{ hasError: boolean; message: string }>;
 }

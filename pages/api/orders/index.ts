@@ -1,11 +1,11 @@
+import { db, dbUsers } from 'database';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth';
-import { db, dbUsers } from 'database';
 import { IOrder } from '../../../interfaces';
-import { authOptions } from '../auth/[...nextauth]';
+import { MOrder } from '../../../models';
 import Product from '../../../models/Product';
 import { ProductDoesNotExist, TotalDoesNotMatch } from '../../../utils/errors';
-import { MOrder } from '../../../models';
+import { authOptions } from '../auth/[...nextauth]';
 
 type Data =
   | {
@@ -51,12 +51,12 @@ const createOrder = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     }
 
     const user = await dbUsers.getUserByEmail(session.user.email);
-    const newOrder = new MOrder({ ...body, isPaid: false, user: user!._id });
+    const newOrder = new MOrder({ ...body, isPaid: false, user: user?._id });
     await newOrder.save();
+    await db.disconnect();
 
     return res.status(201).json(newOrder);
   } catch (e) {
-    // eslint-disable-next-line no-console
     console.log(e);
     if (e instanceof ProductDoesNotExist || e instanceof TotalDoesNotMatch) {
       await db.disconnect();
