@@ -1,7 +1,7 @@
-import GithubProvider from 'next-auth/providers/github';
-import CredentialsProvider from 'next-auth/providers/credentials';
 import { dbUsers } from 'database';
 import NextAuth from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import GithubProvider from 'next-auth/providers/github';
 
 export const authOptions = NextAuth({
   secret: process.env.NEXTAUTH_SECRET,
@@ -40,7 +40,7 @@ export const authOptions = NextAuth({
 
   // Custom callbacks
   callbacks: {
-    async jwt({ token, account, user }: any) {
+    async jwt({ token, account, user }) {
       const _token = token;
 
       if (!account) return _token;
@@ -52,13 +52,13 @@ export const authOptions = NextAuth({
           _token.user = user;
           break;
         case 'oauth':
-          _token.user = await dbUsers.oAuthToDatabase(user.email, user.name);
+          _token.user = await dbUsers.oAuthToDatabase(user?.email ?? 'hola', user?.name ?? 'hola');
           break;
       }
 
       return _token;
     },
-    async session({ session, token }: any) {
+    async session({ session, token }) {
       const _session = session;
       _session.accessToken = token.accessToken;
       _session.user = token.user;

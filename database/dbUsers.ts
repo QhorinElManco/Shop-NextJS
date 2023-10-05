@@ -8,6 +8,7 @@ export const getUserByEmail = async (email: string) => {
   await db.disconnect();
   return user;
 };
+
 export const checkUserEmailAndPassword = async (email: string, password: string) => {
   await db.connect();
   const user = await MUser.findOne({ email });
@@ -19,7 +20,7 @@ export const checkUserEmailAndPassword = async (email: string, password: string)
 
   const { _id, name, role } = user;
 
-  return { id: _id, name, email, role };
+  return { id: _id, _id, name, email, role };
 };
 
 export const oAuthToDatabase = async (oAuthEmail: string, oAuthName: string) => {

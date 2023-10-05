@@ -1,15 +1,15 @@
 import { notifications } from '@mantine/notifications';
 import { tesloAPI } from 'api';
 import { isAxiosError } from 'axios';
+import { IUser } from 'interfaces';
+import { signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { FC, ReactNode, useEffect, useReducer } from 'react';
-import { RequestNotControllerError } from 'utils/errors';
-import { useSession, signOut } from 'next-auth/react';
 import { cookieHelper } from 'utils';
+import { RequestNotControllerError } from 'utils/errors';
 import { AuthContext } from './Context';
 import { authReducer } from './Reducer';
 import { AuthState } from './types';
-import { IUser } from '../../interfaces';
 
 type ResponseLogin =
   | {
