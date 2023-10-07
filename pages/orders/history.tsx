@@ -12,6 +12,7 @@ interface HistoryPageProps {
 }
 
 const HistoryPage: NextPage<HistoryPageProps> = ({ orders }) => {
+  const columns = ['ID', 'Fullname', 'Status', 'Order'];
   const rows = orders.map((order, index) => ({
     id: index + 1,
     order_id: order._id,
@@ -19,7 +20,6 @@ const HistoryPage: NextPage<HistoryPageProps> = ({ orders }) => {
     fullName: `${order.shippingAddress.firstName} ${order.shippingAddress.lastName}`,
   }));
 
-  const columns = ['ID', 'Fullname', 'Status', 'Order'];
   return (
     <ShopLayout title="Order history" description="Customer order history">
       <Title order={3}>Order history</Title>
