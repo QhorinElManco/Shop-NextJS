@@ -52,6 +52,7 @@ const createOrder = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 
     const user = await dbUsers.getUserByEmail(session.user.email);
     const newOrder = new MOrder({ ...body, isPaid: false, user: user?._id });
+    newOrder.total = Math.round(backendTotal * 100) / 100; // round to 2 decimal places
     await newOrder.save();
     await db.disconnect();
 

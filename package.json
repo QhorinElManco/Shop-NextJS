@@ -13,6 +13,7 @@
     "@mantine/prism": "6.0.21",
     "@mantine/spotlight": "6.0.21",
     "@next/bundle-analyzer": "13.4.19",
+    "@paypal/react-paypal-js": "^8.1.3",
     "@react-buddy/ide-toolbox-next": "2.4.1",
     "@react-buddy/palette-mantine-core": "6.0.1",
     "@react-buddy/palette-mantine-dates": "6.0.1",

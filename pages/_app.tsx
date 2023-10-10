@@ -1,17 +1,18 @@
 import { ColorScheme, ColorSchemeProvider, MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
+import { PayPalScriptProvider } from '@paypal/react-paypal-js';
 import { DehydratedState, Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Spotlight } from 'components/Spotlight';
 import { AuthProvider, CartProvider } from 'context';
 import { getCookie, setCookie } from 'cookies-next';
 import { GetServerSidePropsContext } from 'next';
+import { Session } from 'next-auth';
+import { SessionProvider } from 'next-auth/react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useState } from 'react';
 import { configTheme } from 'styles/theme.config';
-import { SessionProvider } from 'next-auth/react';
-import { Session } from 'next-auth';
 
 interface Props extends AppProps {
   colorScheme: ColorScheme;
@@ -38,30 +39,32 @@ export function App(props: Props) {
         <link rel="shortcut icon" href="/favicon.svg" />
       </Head>
       <SessionProvider session={session}>
-        <QueryClientProvider client={queryClient}>
-          <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
-            <Hydrate state={dehydratedState}>
-              <ReactQueryDevtools initialIsOpen={false} />
-              <MantineProvider
-                theme={{
-                  colorScheme,
-                  ...configTheme,
-                }}
-                withGlobalStyles
-                withNormalizeCSS
-              >
-                <AuthProvider>
-                  <CartProvider>
-                    <Notifications />
-                    <Spotlight>
-                      <Component {...pageProps} />
-                    </Spotlight>
-                  </CartProvider>
-                </AuthProvider>
-              </MantineProvider>
-            </Hydrate>
-          </ColorSchemeProvider>
-        </QueryClientProvider>
+        <PayPalScriptProvider options={{ clientId: process.env.NEXT_PUBLIC_PAYPAL_CL ?? '' }}>
+          <QueryClientProvider client={queryClient}>
+            <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
+              <Hydrate state={dehydratedState}>
+                <ReactQueryDevtools initialIsOpen={false} />
+                <MantineProvider
+                  theme={{
+                    colorScheme,
+                    ...configTheme,
+                  }}
+                  withGlobalStyles
+                  withNormalizeCSS
+                >
+                  <AuthProvider>
+                    <CartProvider>
+                      <Notifications />
+                      <Spotlight>
+                        <Component {...pageProps} />
+                      </Spotlight>
+                    </CartProvider>
+                  </AuthProvider>
+                </MantineProvider>
+              </Hydrate>
+            </ColorSchemeProvider>
+          </QueryClientProvider>
+        </PayPalScriptProvider>
       </SessionProvider>
     </>
   );

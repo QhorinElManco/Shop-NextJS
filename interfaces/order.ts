@@ -1,6 +1,6 @@
-import { IUser } from './user';
 import { IShippingAddress } from './cart';
 import { IProductSize } from './products';
+import { IUser } from './user';
 
 export interface IOrderItem {
   _id: string;
@@ -24,4 +24,5 @@ export interface IOrder {
   total: number;
   isPaid: boolean;
   paidAt?: string;
+  transactionId?: string;
 }
