@@ -1,7 +1,7 @@
 import { Badge, Box, Button, Grid, Text, Title } from '@mantine/core';
 import { QueryClient, dehydrate } from '@tanstack/react-query';
-import { ShopLayout } from 'components/Layouts';
-import { ProductCarousel, SizeSelector } from 'components/Products';
+import { ShopLayout } from 'components/layouts';
+import { ProductCarousel, SizeSelector } from 'components/products';
 import { dbProducts } from 'database';
 import { useCartContext } from 'hooks/context';
 import { useProduct } from 'hooks/queries';

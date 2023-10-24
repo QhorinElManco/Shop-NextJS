@@ -1,0 +1,22 @@
+{
+  "folders": [
+	{
+		"name": "Shop-NextJS",
+		"path": "."
+	}
+],
+  "settings": {
+    "cSpell.words": [
+      "embla",
+      "fullname",
+      "mantine",
+      "nextauth",
+      "paypal",
+      "PAYPAL",
+      "tabler",
+      "tanstack",
+      "teslo",
+      "typecheck"
+    ]
+  }
+}

@@ -1,13 +1,13 @@
 import { Anchor, Box, Button, Divider, Grid, TextInput, Title } from '@mantine/core';
+import { AuthLayout } from 'components/layouts';
 import { useLogin } from 'hooks/forms';
-import NextLink from 'next/link';
-import { useRouter } from 'next/router';
-import { AuthLayout } from 'components/Layouts';
 import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth';
-import { useEffect, useState } from 'react';
-import { ClientSafeProvider, getProviders, LiteralUnion, signIn } from 'next-auth/react';
 import { BuiltInProviderType } from 'next-auth/providers';
+import { ClientSafeProvider, LiteralUnion, getProviders, signIn } from 'next-auth/react';
+import NextLink from 'next/link';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import { authOptions } from '../api/auth/[...nextauth]';
 
 type Providers = Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider> | null;

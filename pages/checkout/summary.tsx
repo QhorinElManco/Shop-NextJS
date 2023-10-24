@@ -17,8 +17,8 @@ import { getCookie } from 'cookies-next';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { ShopLayout } from '../../components/Layouts';
 import { CartList, OrderSummary } from '../../components/cart';
+import { ShopLayout } from '../../components/layouts';
 import { useCartContext, useCountry } from '../../hooks';
 
 export const SummaryPage = () => {

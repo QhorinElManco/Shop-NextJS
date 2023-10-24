@@ -1,7 +1,7 @@
 import { Flex, Grid, Space, Title } from '@mantine/core';
 import { QueryClient, dehydrate } from '@tanstack/react-query';
-import { ShopLayout } from 'components/Layouts';
-import { ProductList } from 'components/Products';
+import { ShopLayout } from 'components/layouts';
+import { ProductList } from 'components/products';
 import { dbProducts } from 'database';
 
 import { useProducts, useSearch } from 'hooks/queries';

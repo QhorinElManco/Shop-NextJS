@@ -1,7 +1,7 @@
 import { Anchor, Box, Title } from '@mantine/core';
 import { IconShoppingCartOff } from '@tabler/icons-react';
 import NextLink from 'next/link';
-import { ShopLayout } from '../../components/Layouts';
+import { ShopLayout } from '../../components/layouts';
 
 export const EmptyPage = () => (
   <ShopLayout title="Empty cart" description="The cart is empty">

@@ -20,8 +20,8 @@ import { Session, getServerSession } from 'next-auth';
 import { useRouter } from 'next/router';
 import authOptions from 'pages/api/auth/[...nextauth]';
 import { useState } from 'react';
-import { ShopLayout } from '../../components/Layouts';
 import { CartList, OrderSummary } from '../../components/cart';
+import { ShopLayout } from '../../components/layouts';
 
 export type OrderResponseBody = {
   id: string;

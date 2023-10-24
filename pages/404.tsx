@@ -1,5 +1,5 @@
 import { Box, Text, Title } from '@mantine/core';
-import { ShopLayout } from 'components/Layouts';
+import { ShopLayout } from 'components/layouts';
 
 const Custom404Page = () => (
   <ShopLayout title="Page not found" description="Oops, there's nothing to show">

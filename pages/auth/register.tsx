@@ -1,10 +1,10 @@
 import { Anchor, Box, Button, Grid, TextInput, Title } from '@mantine/core';
 import { useRegister } from 'hooks/forms';
-import NextLink from 'next/link';
-import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth';
-import { AuthLayout } from '../../components/Layouts';
+import NextLink from 'next/link';
+import { useRouter } from 'next/router';
+import { AuthLayout } from '../../components/layouts';
 import { authOptions } from '../api/auth/[...nextauth]';
 
 const RegisterPage = () => {

@@ -1,10 +1,10 @@
 import { Button, Container, Grid, Select, Space, TextInput, Title } from '@mantine/core';
 import { QueryClient, dehydrate } from '@tanstack/react-query';
-import { ShopLayout } from 'components/Layouts';
+import { ShopLayout } from 'components/layouts';
 import { dbCountries } from 'database';
 import { GetServerSideProps } from 'next';
 
-import { useCountry, useAddress } from '../../hooks';
+import { useAddress, useCountry } from '../../hooks';
 
 type SelectType = {
   value: string;

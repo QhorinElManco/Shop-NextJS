@@ -5,7 +5,7 @@ import { GetServerSideProps, NextPage } from 'next';
 import { Session, getServerSession } from 'next-auth';
 import NextLink from 'next/link';
 import authOptions from 'pages/api/auth/[...nextauth]';
-import { ShopLayout } from '../../components/Layouts';
+import { ShopLayout } from '../../components/layouts';
 
 interface HistoryPageProps {
   orders: IOrder[];
