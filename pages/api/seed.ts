@@ -7,9 +7,9 @@ type Data = {
 };
 
 export default async function handler(_: NextApiRequest, res: NextApiResponse<Data>) {
-  if (process.env.NODE_ENV === 'production') {
-    return res.status(401).json({ message: 'Not authorized' });
-  }
+  // if (process.env.NODE_ENV === 'production') {
+  //   return res.status(401).json({ message: 'Not authorized' });
+  // }
 
   await db.connect();
 
