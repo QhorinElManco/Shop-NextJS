@@ -1,15 +1,15 @@
 import { Badge, Box, Button, Grid, Text, Title } from '@mantine/core';
-import { QueryClient, dehydrate } from '@tanstack/react-query';
-import { ShopLayout } from 'components/layouts';
-import { ProductCarousel, SizeSelector } from 'components/products';
-import { dbProducts } from 'database';
-import { useCartContext } from 'hooks/context';
-import { useProduct } from 'hooks/queries';
-import { ICartProduct } from 'interfaces';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { FullScreenLoading, ItemCounter } from '../../components/UI';
+
+import { dbProducts } from '@/database';
+import { FullScreenLoading, ItemCounter } from '@/components/UI';
+import { ICartProduct } from '@/interfaces';
+import { ProductCarousel, SizeSelector } from '@/components/products';
+import { ShopLayout } from '@/components/layouts';
+import { useCartContext, useProduct } from '@/hooks';
 
 interface ProductPageProps {
   slug: string;
@@ -52,11 +52,11 @@ export const ProductPage = ({ slug }: ProductPageProps) => {
   return (
     <ShopLayout title={productQuery.data.title} description={productQuery.data.description}>
       <Grid>
-        <Grid.Col xs={12} sm={7}>
+        <Grid.Col span={{ sm: 7 }}>
           {/* Carrusel */}
           <ProductCarousel images={productQuery.data.images} />
         </Grid.Col>
-        <Grid.Col xs={12} sm={5}>
+        <Grid.Col span={{ sm: 5 }}>
           {/* Titulo */}
           <Box>
             <Title order={1}>{productQuery.data.title}</Title>
@@ -101,7 +101,6 @@ export const ProductPage = ({ slug }: ProductPageProps) => {
     </ShopLayout>
   );
 };
-export default ProductPage;
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const slugs = await dbProducts.getAllProductSlugs();
@@ -143,3 +142,5 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
     revalidate: 60 * 60 * 24,
   };
 };
+
+export default ProductPage;

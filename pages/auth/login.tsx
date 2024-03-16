@@ -1,16 +1,17 @@
-import { Anchor, Box, Button, Divider, Grid, TextInput, Title } from '@mantine/core';
-import { AuthLayout } from 'components/layouts';
-import { useLogin } from 'hooks/forms';
+import { Anchor, Button, Divider, Stack, TextInput, Title } from '@mantine/core';
 import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth';
 import { BuiltInProviderType } from 'next-auth/providers';
-import { ClientSafeProvider, LiteralUnion, getProviders, signIn } from 'next-auth/react';
+import { ClientSafeProvider, getProviders, LiteralUnion, signIn } from 'next-auth/react';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+
+import { useLogin } from '@/hooks/forms';
+import { UnauthenticatedLayout } from '@/components/layouts';
 import { authOptions } from '../api/auth/[...nextauth]';
 
-type Providers = Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider> | null;
+type Providers = Record<LiteralUnion<BuiltInProviderType>, ClientSafeProvider> | null;
 
 const LoginPage = () => {
   const router = useRouter();
@@ -24,64 +25,57 @@ const LoginPage = () => {
   }, []);
 
   return (
-    <AuthLayout title="Login">
+    <UnauthenticatedLayout title="Login">
       <form onSubmit={loginForm.onSubmit(onLogin, onLoginError)}>
-        <Box w={350} p={20}>
-          <Grid>
-            <Grid.Col xs={12}>
-              <Title order={2}>Login</Title>
-            </Grid.Col>
-            <Grid.Col xs={12}>
-              <TextInput
-                label="Email"
-                type="email"
-                autoComplete="username"
-                {...loginForm.getInputProps('email')}
-              />
-            </Grid.Col>
-            <Grid.Col xs={12}>
-              <TextInput
-                label="Password"
-                type="password"
-                autoComplete="current-password"
-                {...loginForm.getInputProps('password')}
-              />
-            </Grid.Col>
-            <Grid.Col xs={12}>
-              <Button type="submit" fullWidth loading={isLoading}>
-                Login
-              </Button>
-            </Grid.Col>
-            <Grid.Col xs={12} ta="right">
-              <Anchor
-                component={NextLink}
-                href={router.query.p ? `/auth/register?p=${router.query.p}` : '/auth/register'}
-                size="sm"
-                underline
-              >
-                You do not have an account yet
-              </Anchor>
-            </Grid.Col>
-            <Grid.Col xs={12}>
-              <Divider orientation="horizontal" />
-              {providers &&
-                Object.values(providers)
-                  .filter((provider) => provider.type !== 'credentials')
-                  .map((provider) => (
-                    <Button
-                      mb="xs"
-                      fullWidth
-                      key={provider.name}
-                      onClick={() => signIn(provider.id).then()}
-                    >
-                      {`Sign in with ${provider.name}`}
-                    </Button>
-                  ))}
-            </Grid.Col>
-          </Grid>
-        </Box>
+        <Stack w={350} p={20}>
+          <Title order={2}>Login</Title>
+
+          <TextInput
+            label="Email"
+            type="email"
+            autoComplete="username"
+            {...loginForm.getInputProps('email')}
+          />
+
+          <TextInput
+            label="Password"
+            type="password"
+            autoComplete="current-password"
+            {...loginForm.getInputProps('password')}
+          />
+
+          <Button type="submit" fullWidth loading={isLoading}>
+            Login
+          </Button>
+
+          <Anchor
+            component={NextLink}
+            href={router.query.p ? `/auth/register?p=${router.query.p}` : '/auth/register'}
+            size="sm"
+            underline="always"
+            ta="right"
+          >
+            You do not have an account yet
+          </Anchor>
+
+          <Divider orientation="horizontal" />
+
+          {providers &&
+            Object.values(providers)
+              .filter((provider) => provider.type !== 'credentials')
+              .map((provider) => (
+                <Button
+                  mb="xs"
+                  fullWidth
+                  key={provider.name}
+                  onClick={() => signIn(provider.id).then()}
+                >
+                  {`Sign in with ${provider.name}`}
+                </Button>
+              ))}
+        </Stack>
       </form>
-    </AuthLayout>
+    </UnauthenticatedLayout>
   );
 };
 

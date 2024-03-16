@@ -1,9 +1,20 @@
-import { Anchor, Box, Button, Grid, Image, Text, Title } from '@mantine/core';
-import { ItemCounter } from 'components/UI';
-import { useCartContext } from 'hooks/context';
-import { ICartProduct, IOrderItem } from 'interfaces';
+import {
+  Anchor,
+  Box,
+  Button,
+  Grid,
+  Image,
+  NumberFormatter,
+  Stack,
+  Text,
+  Title,
+} from '@mantine/core';
 import NextLink from 'next/link';
 import { FC } from 'react';
+
+import { ItemCounter } from '@/components/UI';
+import { useCartContext } from '@/hooks';
+import { ICartProduct, IOrderItem } from '@/interfaces';
 
 interface Props {
   editable?: boolean;
@@ -20,7 +31,7 @@ export const CartList: FC<Props> = ({ editable = false, products = [] }) => {
     <>
       {productsToShow.map((product) => (
         <Grid gutter="sm" key={`${product.slug} - ${product.size}`}>
-          <Grid.Col xs={2}>
+          <Grid.Col span={2}>
             <Anchor component={NextLink} href={`product/${product.slug}`}>
               <Image
                 width={100}
@@ -28,11 +39,10 @@ export const CartList: FC<Props> = ({ editable = false, products = [] }) => {
                 radius="sm"
                 fit="contain"
                 alt={product.title}
-                withPlaceholder
               />
             </Anchor>
           </Grid.Col>
-          <Grid.Col xs={8}>
+          <Grid.Col span={8}>
             <Box>
               <Title order={5}>{product.title}</Title>
               <Text>
@@ -53,18 +63,19 @@ export const CartList: FC<Props> = ({ editable = false, products = [] }) => {
               )}
             </Box>
           </Grid.Col>
-          <Grid.Col xs={2} className="grid-content-center">
-            <Text>{`$${product.price}`}</Text>
-            {_editable && (
-              <Button
-                size="xs"
-                variant="subtle"
-                onClick={() => deleteProductFromCart(product as ICartProduct)}
-                compact
-              >
-                Remove
-              </Button>
-            )}
+          <Grid.Col span={2}>
+            <Stack gap={0} align="center">
+              <NumberFormatter prefix="$" value={product.price} />
+              {_editable && (
+                <Button
+                  size="compact-xs"
+                  variant="subtle"
+                  onClick={() => deleteProductFromCart(product as ICartProduct)}
+                >
+                  Remove
+                </Button>
+              )}
+            </Stack>
           </Grid.Col>
         </Grid>
       ))}

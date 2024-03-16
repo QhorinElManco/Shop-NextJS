@@ -1,6 +1,7 @@
-import { SimpleGrid, Text } from '@mantine/core';
-import { useCartContext } from 'hooks';
+import { NumberFormatter, SimpleGrid, Text } from '@mantine/core';
 import { FC } from 'react';
+
+import { useCartContext } from '@/hooks';
 
 interface OrderSummaryProps {
   order?: {
@@ -20,27 +21,34 @@ export const OrderSummary: FC<OrderSummaryProps> = ({ order }) => {
     <>
       <SimpleGrid cols={2}>
         <Text>No. Products</Text>
-        <Text align="right">
+        <Text ta="right">
           {numberOfItems > 1 ? `${numberOfItems} items` : `${numberOfItems} item`}
         </Text>
       </SimpleGrid>
 
       <SimpleGrid cols={2} mt={4}>
         <Text>Subtotal</Text>
-        <Text align="right">$ {subtotal}</Text>
+        <Text ta="right">
+          <NumberFormatter prefix="$ " value={subtotal} />
+        </Text>
       </SimpleGrid>
 
       <SimpleGrid cols={2} mt={4}>
-        <Text>Taxation ({Number(process.env.NEXT_PUBLIC_TAX_RATE) * 100} %)</Text>
-        <Text align="right">$ {tax}</Text>
+        <Text>
+          Taxation (
+          {process.env.NEXT_PUBLIC_TAX_RATE ? Number(process.env.NEXT_PUBLIC_TAX_RATE) * 100 : 0} %)
+        </Text>
+        <Text ta="right">
+          <NumberFormatter prefix="$ " value={tax} />
+        </Text>
       </SimpleGrid>
 
       <SimpleGrid cols={2} mt={4}>
         <Text>
           <strong>Total</strong>
         </Text>
-        <Text align="right">
-          <strong>$ {total}</strong>
+        <Text ta="right" fw={600}>
+          <NumberFormatter prefix="$ " value={total} />
         </Text>
       </SimpleGrid>
     </>

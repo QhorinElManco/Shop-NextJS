@@ -7,10 +7,10 @@ interface Props {
 }
 
 export const ProductCarousel: FC<Props> = ({ images }) => (
-  <Carousel sx={{ maxWidth: 700 }} mx="auto" controlsOffset="xs" withIndicators loop>
+  <Carousel maw={700} mx="auto" controlsOffset="xs" withIndicators loop>
     {images.map((image) => (
       <Carousel.Slide key={image}>
-        <Image src={`/products/${image}`} alt={image} withPlaceholder />
+        <Image src={`/products/${image}`} alt={image} />
       </Carousel.Slide>
     ))}
   </Carousel>

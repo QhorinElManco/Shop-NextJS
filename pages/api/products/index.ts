@@ -1,7 +1,8 @@
-import { db, SHOP_CONSTANTS } from 'database';
-import { IProduct } from 'interfaces';
-import { MProduct } from 'models';
 import type { NextApiRequest, NextApiResponse } from 'next';
+
+import { db, SHOP_CONSTANTS } from '@/database';
+import { IProduct } from '@/interfaces';
+import { MProduct } from '@/models';
 
 type Data =
   | {

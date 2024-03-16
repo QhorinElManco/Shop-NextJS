@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { ICartProduct, IShippingAddress } from '../../interfaces';
+import { ICartProduct, IShippingAddress } from '@/interfaces';
 
 export interface CartProviderProps {
   children: ReactNode;

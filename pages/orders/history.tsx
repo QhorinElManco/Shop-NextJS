@@ -1,11 +1,12 @@
 import { Anchor, Badge, Space, Table, Title } from '@mantine/core';
-import { dbOrders, dbUsers } from 'database';
-import { IOrder } from 'interfaces';
 import { GetServerSideProps, NextPage } from 'next';
-import { Session, getServerSession } from 'next-auth';
+import { getServerSession, Session } from 'next-auth';
 import NextLink from 'next/link';
-import authOptions from 'pages/api/auth/[...nextauth]';
-import { ShopLayout } from '../../components/layouts';
+
+import authOptions from '@/pages/api/auth/[...nextauth]';
+import { IOrder } from '@/interfaces';
+import { dbOrders, dbUsers } from '@/database';
+import { ShopLayout } from '@/components/layouts';
 
 interface HistoryPageProps {
   orders: IOrder[];
@@ -13,6 +14,7 @@ interface HistoryPageProps {
 
 const HistoryPage: NextPage<HistoryPageProps> = ({ orders }) => {
   const columns = ['ID', 'Fullname', 'Status', 'Order'];
+
   const rows = orders.map((order, index) => ({
     id: index + 1,
     order_id: order._id,
@@ -24,20 +26,20 @@ const HistoryPage: NextPage<HistoryPageProps> = ({ orders }) => {
     <ShopLayout title="Order history" description="Customer order history">
       <Title order={3}>Order history</Title>
       <Space h="md" />
-      <Table highlightOnHover withBorder className="fade">
-        <thead>
-          <tr>
+      <Table className="fade" highlightOnHover>
+        <Table.Thead>
+          <Table.Tr>
             {columns.map((column) => (
-              <th key={column}>{column}</th>
+              <Table.Th key={column}>{column}</Table.Th>
             ))}
-          </tr>
-        </thead>
-        <tbody>
+          </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody>
           {rows.map((row) => (
-            <tr key={row.order_id}>
-              <td>{row.id}</td>
-              <td>{row.fullName}</td>
-              <td>
+            <Table.Tr key={row.order_id}>
+              <Table.Td>{row.id}</Table.Td>
+              <Table.Td>{row.fullName}</Table.Td>
+              <Table.Td>
                 {row.paid ? (
                   <Badge color="green" variant="filled">
                     Paid
@@ -47,15 +49,15 @@ const HistoryPage: NextPage<HistoryPageProps> = ({ orders }) => {
                     Not paid
                   </Badge>
                 )}
-              </td>
-              <td>
-                <Anchor component={NextLink} href={`/orders/${row.order_id}`} underline>
+              </Table.Td>
+              <Table.Td>
+                <Anchor component={NextLink} href={`/orders/${row.order_id}`} underline="always">
                   {row.order_id}
                 </Anchor>
-              </td>
-            </tr>
+              </Table.Td>
+            </Table.Tr>
           ))}
-        </tbody>
+        </Table.Tbody>
       </Table>
     </ShopLayout>
   );

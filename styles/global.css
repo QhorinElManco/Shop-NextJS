@@ -1,0 +1,13 @@
+@keyframes fade {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.fade {
+    animation: fade 1.5s both;
+    -webkit-animation: fade 1.5s both;
+}

@@ -12,16 +12,17 @@ import {
   Title,
 } from '@mantine/core';
 import { PayPalButtons } from '@paypal/react-paypal-js';
-import { tesloAPI } from 'api';
-import { dbOrders, dbUsers } from 'database';
-import { IOrder } from 'interfaces';
 import { GetServerSideProps, NextPage } from 'next';
 import { Session, getServerSession } from 'next-auth';
 import { useRouter } from 'next/router';
-import authOptions from 'pages/api/auth/[...nextauth]';
 import { useState } from 'react';
-import { CartList, OrderSummary } from '../../components/cart';
-import { ShopLayout } from '../../components/layouts';
+
+import { tesloAPI } from '@/api';
+import { dbOrders, dbUsers } from '@/database';
+import { IOrder } from '@/interfaces';
+import authOptions from '@/pages/api/auth/[...nextauth]';
+import { CartList, OrderSummary } from '@/components/cart';
+import { ShopLayout } from '@/components/layouts';
 
 export type OrderResponseBody = {
   id: string;
@@ -58,15 +59,27 @@ export const OrderPage: NextPage<OrderPageProps> = ({ order }) => {
     }
   };
 
+  const createOrder = async (data: CreateOrderData, actions: CreateOrderActions) => {
+    const transactionID = await actions.order.create({
+      purchase_units: [
+        {
+          amount: {
+            value: `${order.total}`,
+          },
+        },
+      ],
+    });
+  };
+
   return (
     <ShopLayout title="Order summary ABC456" description="Order summary">
       <Title order={3}>Order: {order._id}</Title>
       <Space h="md" />
       <Grid>
-        <Grid.Col xs={12} sm={7}>
+        <Grid.Col span={{ sm: 7 }}>
           <CartList products={order.orderItems} />
         </Grid.Col>
-        <Grid.Col xs={12} sm={5}>
+        <Grid.Col span={{ sm: 5 }}>
           <Card shadow="md" withBorder>
             <Title order={2}>
               Summary (
@@ -75,7 +88,7 @@ export const OrderPage: NextPage<OrderPageProps> = ({ order }) => {
 
             <Divider my="md" />
 
-            <Group position="apart">
+            <Group justify="apart">
               <Text size="lg">
                 <strong>Delivery address</strong>
               </Text>
@@ -104,18 +117,22 @@ export const OrderPage: NextPage<OrderPageProps> = ({ order }) => {
                     </Badge>
                   ) : (
                     <PayPalButtons
-                      createOrder={(data, actions) =>
-                        actions.order.create({
-                          purchase_units: [
-                            {
-                              amount: {
-                                value: `${order.total}`,
-                              },
-                            },
-                          ],
-                        })
+                      createOrder={
+                        createOrder
+                        // (_, actions) =>
+                        //   actions.order.create({
+                        //     intent: 'CAPTURE',
+                        //     purchase_units: [
+                        //       {
+                        //         amount: {
+                        //           value: `${order.total}`,
+                        //           currency_code: 'USD',
+                        //         },
+                        //       },
+                        //     ],
+                        //   })
                       }
-                      onApprove={(data, actions) =>
+                      onApprove={(_, actions) =>
                         actions.order!.capture().then((details) => onOrderCompleted(details))
                       }
                     />

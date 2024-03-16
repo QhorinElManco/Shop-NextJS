@@ -1,10 +1,10 @@
 import { Button, Container, Grid, Select, Space, TextInput, Title } from '@mantine/core';
 import { QueryClient, dehydrate } from '@tanstack/react-query';
-import { ShopLayout } from 'components/layouts';
-import { dbCountries } from 'database';
 import { GetServerSideProps } from 'next';
 
-import { useAddress, useCountry } from '../../hooks';
+import { ShopLayout } from '@/components/layouts';
+import { dbCountries } from '@/database';
+import { useAddressForm, useCountry } from '@/hooks';
 
 type SelectType = {
   value: string;
@@ -13,7 +13,7 @@ type SelectType = {
 
 export const AddressPage = () => {
   const countryQuery = useCountry();
-  const { form, handleError, handleSubmit } = useAddress();
+  const { form, handleError, handleSubmit } = useAddressForm();
 
   return (
     <ShopLayout title="Address" description="Confirm your address">
@@ -22,19 +22,19 @@ export const AddressPage = () => {
       <form onSubmit={form.onSubmit(handleSubmit, handleError)}>
         <Container size="sm">
           <Grid>
-            <Grid.Col xs={12}>
+            <Grid.Col span={12}>
               <TextInput label="First name" required {...form.getInputProps('firstName')} />
             </Grid.Col>
-            <Grid.Col xs={12}>
+            <Grid.Col span={12}>
               <TextInput label="Last name" required {...form.getInputProps('lastName')} />
             </Grid.Col>
-            <Grid.Col xs={12}>
+            <Grid.Col span={12}>
               <TextInput label="Address" required {...form.getInputProps('address')} />
             </Grid.Col>
-            <Grid.Col xs={12}>
+            <Grid.Col span={12}>
               <TextInput label="Address 2 (Optional)" {...form.getInputProps('address2')} />
             </Grid.Col>
-            <Grid.Col xs={12}>
+            <Grid.Col span={12}>
               <Select
                 required
                 searchable
@@ -51,13 +51,13 @@ export const AddressPage = () => {
                 {...form.getInputProps('country')}
               />
             </Grid.Col>
-            <Grid.Col xs={12}>
+            <Grid.Col span={12}>
               <TextInput label="Postal code" required {...form.getInputProps('postalCode')} />
             </Grid.Col>
-            <Grid.Col xs={12}>
+            <Grid.Col span={12}>
               <TextInput label="Phone number" required {...form.getInputProps('phoneNumber')} />
             </Grid.Col>
-            <Grid.Col xs={12} mt="xl" className="grid-content-center">
+            <Grid.Col span={12} mt="xl" className="grid-content-center">
               <Button type="submit">Review order</Button>
             </Grid.Col>
           </Grid>

@@ -1,4 +1,4 @@
 export * from './ProductList';
-export * from './ProductCard';
+export * from './product-card';
 export * from './ProductCarousel';
 export * from './ProductSizeSelector';

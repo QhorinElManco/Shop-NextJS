@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { envVariables } from '@/utils';
 
 /**
  * 0 = disconnected
@@ -25,7 +26,8 @@ export const connect = async () => {
     await mongoose.disconnect();
   }
 
-  await mongoose.connect(process.env.NEXT_MONGO_URL || '');
+  await mongoose.connect(envVariables.getMongoUrl() || '');
+
   mongoConnection.isConnected = 1;
 };
 

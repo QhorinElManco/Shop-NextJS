@@ -1,10 +1,10 @@
 import { db, dbUsers } from 'database';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth';
-import { IOrder } from '../../../interfaces';
-import { MOrder } from '../../../models';
-import Product from '../../../models/Product';
-import { ProductDoesNotExist, TotalDoesNotMatch } from '../../../utils/errors';
+
+import { IOrder } from '@/interfaces';
+import { MOrder, MProduct } from '@/models';
+import { errors } from '@/utils';
 import { authOptions } from '../auth/[...nextauth]';
 
 type Data =
@@ -30,14 +30,14 @@ const createOrder = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   const productIds = orderItems.map((item) => item._id);
 
   await db.connect();
-  const dbProducts = await Product.find({ _id: { $in: productIds } });
+  const dbProducts = await MProduct.find({ _id: { $in: productIds } });
 
   try {
     const subtotal = orderItems.reduce((prev, current) => {
       const currentPrice = dbProducts.find((p) => p.id === current._id)?.price;
 
       if (!currentPrice) {
-        throw new ProductDoesNotExist('Product does not exist');
+        throw new errors.ProductDoesNotExist('Product does not exist');
       }
 
       return currentPrice * current.quantity + prev;
@@ -58,8 +58,7 @@ const createOrder = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 
     return res.status(201).json(newOrder);
   } catch (e) {
-    console.log(e);
-    if (e instanceof ProductDoesNotExist || e instanceof TotalDoesNotMatch) {
+    if (e instanceof errors.ProductDoesNotExist || e instanceof errors.TotalDoesNotMatch) {
       await db.disconnect();
       return res.status(400).json({ message: e.message });
     }

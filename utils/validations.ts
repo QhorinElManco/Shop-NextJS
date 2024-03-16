@@ -3,6 +3,3 @@ const EXP_REGULAR_EMAIL =
 
 export const isValidEmail = (email: string): boolean =>
   !!email.toLowerCase().match(EXP_REGULAR_EMAIL);
-
-export const isEmail = (email: string): string | undefined =>
-  isValidEmail(email) ? undefined : 'Invalid email address';

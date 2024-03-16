@@ -1,27 +1,27 @@
 import { useDebouncedValue } from '@mantine/hooks';
-import { SpotlightAction, SpotlightProvider } from '@mantine/spotlight';
+import { Spotlight as SpotlightProvider } from '@mantine/spotlight';
 import { IconSearch } from '@tabler/icons-react';
 import { useSearch } from 'hooks/queries';
 import { useRouter } from 'next/router';
-import { FC, ReactNode, useEffect, useState } from 'react';
-import { CustomActionComponent } from './CustomAction';
+import { FC, useEffect, useState } from 'react';
+import { Action } from './Action';
 
-interface Props {
-  children: ReactNode;
-}
-
-export const Spotlight: FC<Props> = ({ children }) => {
+export const Spotlight: FC = () => {
   const router = useRouter();
   // Search
   const [query, setQuery] = useState('');
   const { searchQuery } = useSearch(query);
   const [debounced] = useDebouncedValue(searchQuery.data, 500);
-  const [actions, setActions] = useState<SpotlightAction[]>([]);
+  const [actions, setActions] = useState<ActionData[]>([]);
+
+  // const allActions = actions.map((action) => <Action {...action} />);
+
+  const allActions = actions.map((action) => <Action {...action} />);
 
   useEffect(() => {
     if (!searchQuery.data) return;
 
-    const actionDefault: SpotlightAction = {
+    const actionDefault: ActionData = {
       slug: 'see_all_results',
       image: '1740407-00-A_1.jpg',
       title: 'See all results',
@@ -29,11 +29,12 @@ export const Spotlight: FC<Props> = ({ children }) => {
       onTrigger: () => router.push(`/search/${query}`),
     };
 
-    const actionsResult: SpotlightAction[] = searchQuery.data.map((product) => ({
+    const actionsResult: ActionData[] = searchQuery.data.map((product) => ({
       slug: product.slug,
       image: product.images[0],
       title: product.title,
       price: product.price,
+      description: product.description,
       onTrigger: () => router.push(`/product/${product.slug}`),
     }));
 
@@ -41,18 +42,16 @@ export const Spotlight: FC<Props> = ({ children }) => {
   }, [debounced]);
 
   return (
-    <SpotlightProvider
-      actions={actions}
-      searchIcon={<IconSearch size={18} />}
-      searchPlaceholder="Search..."
-      cleanQueryOnClose
+    <SpotlightProvider.Root
+      clearQueryOnClose
       query={query}
       onQueryChange={setQuery}
-      actionComponent={CustomActionComponent}
-      nothingFoundMessage={searchQuery.isLoading ? 'Loading' : 'Nothing found...'}
       onSpotlightClose={() => setActions([])}
     >
-      {children}
-    </SpotlightProvider>
+      <SpotlightProvider.Search leftSection={<IconSearch size={18} />} placeholder="Search..." />
+      <SpotlightProvider.ActionsList>
+        {actions ? allActions : <SpotlightProvider.Empty>Nothing found...</SpotlightProvider.Empty>}
+      </SpotlightProvider.ActionsList>
+    </SpotlightProvider.Root>
   );
 };

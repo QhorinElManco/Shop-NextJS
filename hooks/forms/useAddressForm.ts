@@ -1,13 +1,15 @@
 import { hasLength, useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { useRouter } from 'next/router';
-import { cookieHelper } from 'utils';
-import { useCartContext } from '../context';
-import { IShippingAddress } from '../../interfaces';
 
-export const useAddress = () => {
+import { cookieHelper } from '@/utils';
+import { useCartContext } from '@/hooks';
+import { IShippingAddress } from '@/interfaces';
+
+export const useAddressForm = () => {
   const router = useRouter();
   const { updateShippingAddress } = useCartContext();
+
   const form = useForm<IShippingAddress>({
     validateInputOnChange: true,
     initialValues: cookieHelper.getAddressFromCookies(),

@@ -3,8 +3,10 @@ import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GithubProvider from 'next-auth/providers/github';
 
+import { envVariables } from '@/utils';
+
 export const authOptions = NextAuth({
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: envVariables.getNextAuthSecret() || '',
 
   // Session options
   session: {
@@ -33,8 +35,8 @@ export const authOptions = NextAuth({
       },
     }),
     GithubProvider({
-      clientId: process.env.GITHUB_ID || '',
-      clientSecret: process.env.GITHUB_SECRET || '',
+      clientId: envVariables.getGithubId() || '',
+      clientSecret: envVariables.getGithubSecret() || '',
     }),
   ],
 

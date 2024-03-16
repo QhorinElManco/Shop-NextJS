@@ -1,19 +1,22 @@
-import { Anchor, Box, Title } from '@mantine/core';
+import { Anchor, Flex, Stack, Title } from '@mantine/core';
 import { IconShoppingCartOff } from '@tabler/icons-react';
 import NextLink from 'next/link';
-import { ShopLayout } from '../../components/layouts';
+
+import { ShopLayout } from '@/components/layouts';
 
 export const EmptyPage = () => (
   <ShopLayout title="Empty cart" description="The cart is empty">
-    <Box className="container-404">
-      <IconShoppingCartOff size={100} strokeWidth={1.2} />
-      <Box className="empty-cart">
-        <Title order={2}>Your cart is empty</Title>
-        <Anchor size="sm" color="blue.8" component={NextLink} href="/">
-          Back to home
-        </Anchor>
-      </Box>
-    </Box>
+    <Flex mih="400px" align="center" justify="center">
+      <Stack align="center">
+        <IconShoppingCartOff size={100} strokeWidth={1.2} />
+        <Stack align="center">
+          <Title order={2}>Your cart is empty</Title>
+          <Anchor c="blue.8" component={NextLink} href="/">
+            Back to home
+          </Anchor>
+        </Stack>
+      </Stack>
+    </Flex>
   </ShopLayout>
 );
 

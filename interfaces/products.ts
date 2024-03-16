@@ -13,6 +13,8 @@ export interface IProduct {
   createdAt: string;
   updatedAt: string;
 }
+export const validSizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'] as const;
+export type IProductSize = (typeof validSizes)[number];
 
-export type IProductSize = 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL' | 'XXXL';
-export type IProductType = 'shirts' | 'pants' | 'hoodies' | 'hats';
+export const validProductTypes = ['shirts', 'pants', 'hoodies', 'hats'] as const;
+export type IProductType = (typeof validProductTypes)[number];

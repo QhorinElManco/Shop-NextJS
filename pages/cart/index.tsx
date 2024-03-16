@@ -1,14 +1,15 @@
 import { Box, Button, Card, Divider, Grid, Space, Title } from '@mantine/core';
-import { CartList, OrderSummary } from 'components/cart';
-import { ShopLayout } from 'components/layouts';
-import { useCartContext } from 'hooks/context';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
+import { CartList, OrderSummary } from '@/components/cart';
+import { ShopLayout } from '@/components/layouts';
+import { useCartContext } from '@/hooks/context';
+
 export const CartPage = () => {
-  const { isLoaded, cart } = useCartContext();
   const router = useRouter();
+  const { isLoaded, cart } = useCartContext();
 
   useEffect(() => {
     if (isLoaded && cart.length === 0) {
@@ -25,10 +26,10 @@ export const CartPage = () => {
       <Title order={3}>My cart</Title>
       <Space h="md" />
       <Grid>
-        <Grid.Col xs={12} sm={7}>
+        <Grid.Col span={{ sm: 7 }}>
           <CartList editable />
         </Grid.Col>
-        <Grid.Col xs={12} sm={5}>
+        <Grid.Col span={{ sm: 5 }}>
           <Card shadow="md" withBorder>
             <Title order={2}>Order</Title>
             <Divider my="md" />

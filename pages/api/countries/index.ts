@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { db } from '../../../database';
-import { MCountry } from '../../../models';
-import { ICountry } from '../../../interfaces';
+import { db } from '@/database';
+import { MCountry } from '@/models';
+import { ICountry } from '@/interfaces';
 
 type Data =
   | {

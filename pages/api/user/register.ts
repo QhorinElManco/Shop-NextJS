@@ -1,16 +1,14 @@
 import bcrypt from 'bcryptjs';
-import { db } from 'database';
-import { MUser } from 'models';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { validations } from 'utils';
-// import { signToken } from 'utils/jwt';
+import { db } from '@/database';
+import { MUser } from '@/models';
+import { validations } from '@/utils';
 
 type Response =
   | {
       message: string;
     }
   | {
-      // token: string;
       user: {
         name: string;
         email: string;

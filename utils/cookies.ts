@@ -1,5 +1,5 @@
 import { deleteCookie, getCookie, setCookie } from 'cookies-next';
-import { IShippingAddress } from '../interfaces';
+import { IShippingAddress } from '@/interfaces';
 
 export const getCookieValue = (cookieName: string): string => {
   const value = getCookie(cookieName);

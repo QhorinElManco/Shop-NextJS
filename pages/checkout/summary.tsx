@@ -17,9 +17,10 @@ import { getCookie } from 'cookies-next';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { CartList, OrderSummary } from '../../components/cart';
-import { ShopLayout } from '../../components/layouts';
-import { useCartContext, useCountry } from '../../hooks';
+
+import { CartList, OrderSummary } from '@/components/cart';
+import { ShopLayout } from '@/components/layouts';
+import { useCartContext, useCountry } from '@/hooks';
 
 export const SummaryPage = () => {
   const router = useRouter();
@@ -40,7 +41,7 @@ export const SummaryPage = () => {
       return;
     }
 
-    router.replace(`/orders/${message}`);
+    await router.replace(`/orders/${message}`);
   };
 
   useEffect(() => {
@@ -58,10 +59,10 @@ export const SummaryPage = () => {
       <Title order={3}>Order summary</Title>
       <Space h="md" />
       <Grid>
-        <Grid.Col xs={12} sm={7}>
+        <Grid.Col span={{ sm: 7 }}>
           <CartList />
         </Grid.Col>
-        <Grid.Col xs={12} sm={5}>
+        <Grid.Col span={{ sm: 5 }}>
           <Card shadow="md" withBorder>
             {numberOfItems > 1 ? (
               <Title order={2}>{`Summary (${numberOfItems} products)`}</Title>
@@ -71,11 +72,11 @@ export const SummaryPage = () => {
 
             <Divider my="md" />
 
-            <Group position="apart">
+            <Group justify="apart">
               <Text size="lg">
                 <strong>Delivery address</strong>
               </Text>
-              <Anchor component={NextLink} href="/checkout/address" underline>
+              <Anchor component={NextLink} href="/checkout/address" underline="always">
                 Edit
               </Anchor>
             </Group>
@@ -93,7 +94,7 @@ export const SummaryPage = () => {
             <Divider my="md" />
 
             <Box className="grid-content-left">
-              <Anchor component={NextLink} href="/cart/" underline>
+              <Anchor component={NextLink} href="/cart/" underline="always">
                 Edit
               </Anchor>
             </Box>

@@ -1,35 +1,39 @@
-import { ColorScheme, ColorSchemeProvider, MantineProvider } from '@mantine/core';
+import '@mantine/core/styles.css';
+import '@mantine/carousel/styles.css';
+import '@mantine/dates/styles.css';
+import '@mantine/notifications/styles.css';
+import '@mantine/spotlight/styles.css';
+
+import { MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import { PayPalScriptProvider } from '@paypal/react-paypal-js';
-import { DehydratedState, Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { HydrationBoundary, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { Spotlight } from 'components/spotlight';
-import { AuthProvider, CartProvider } from 'context';
-import { getCookie, setCookie } from 'cookies-next';
-import { GetServerSidePropsContext } from 'next';
 import { Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useState } from 'react';
-import { configTheme } from 'styles/theme.config';
+
+import { theme } from '@/styles/theme.config';
+import { AuthProvider, CartProvider } from '@/context';
+import { Spotlight } from '@/components/spotlight';
 
 interface Props extends AppProps {
-  colorScheme: ColorScheme;
-  dehydratedState: DehydratedState;
   session: Session;
 }
-
 export function App(props: Props) {
-  const { Component, pageProps, dehydratedState, session } = props;
-  const [queryClient] = useState(() => new QueryClient());
-  const [colorScheme, setColorScheme] = useState<ColorScheme>(props.colorScheme);
-
-  const toggleColorScheme = (value?: ColorScheme) => {
-    const nextColorScheme = value || (colorScheme === 'dark' ? 'light' : 'dark');
-    setColorScheme(nextColorScheme);
-    setCookie('mantine-color-scheme', nextColorScheme, { maxAge: 60 * 60 * 24 * 30 });
-  };
+  const { Component, pageProps, session } = props;
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            staleTime: 60 * 1000, // 1 minute
+          },
+        },
+      })
+  );
 
   return (
     <>
@@ -39,39 +43,25 @@ export function App(props: Props) {
         <link rel="shortcut icon" href="/favicon.svg" />
       </Head>
       <SessionProvider session={session}>
-        <PayPalScriptProvider options={{ clientId: process.env.NEXT_PUBLIC_PAYPAL_CL ?? '' }}>
+        <PayPalScriptProvider options={{ clientId: process.env.NEXT_PUBLIC_PAYPAL_CL || '' }}>
           <QueryClientProvider client={queryClient}>
-            <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
-              <Hydrate state={dehydratedState}>
-                <ReactQueryDevtools initialIsOpen={false} />
-                <MantineProvider
-                  theme={{
-                    colorScheme,
-                    ...configTheme,
-                  }}
-                  withGlobalStyles
-                  withNormalizeCSS
-                >
-                  <AuthProvider>
-                    <CartProvider>
-                      <Notifications />
-                      <Spotlight>
-                        <Component {...pageProps} />
-                      </Spotlight>
-                    </CartProvider>
-                  </AuthProvider>
-                </MantineProvider>
-              </Hydrate>
-            </ColorSchemeProvider>
+            <ReactQueryDevtools initialIsOpen={false} />
+            <HydrationBoundary state={pageProps.dehydratedState}>
+              <MantineProvider theme={theme}>
+                <Notifications />
+                <AuthProvider>
+                  <CartProvider>
+                    <Spotlight />
+                    <Component {...pageProps} />
+                  </CartProvider>
+                </AuthProvider>
+              </MantineProvider>
+            </HydrationBoundary>
           </QueryClientProvider>
         </PayPalScriptProvider>
       </SessionProvider>
     </>
   );
 }
-
-App.getInitialProps = ({ ctx }: { ctx: GetServerSidePropsContext }) => ({
-  colorScheme: getCookie('mantine-color-scheme', ctx) || 'light',
-});
 
 export default App;

@@ -1,7 +1,9 @@
 import { Grid } from '@mantine/core';
-import { IProduct } from 'interfaces';
 import { FC } from 'react';
-import { ProductCard } from './ProductCard';
+
+import { IProduct } from '@/interfaces';
+
+import { ProductCard } from './product-card';
 
 interface Props {
   products: IProduct[];

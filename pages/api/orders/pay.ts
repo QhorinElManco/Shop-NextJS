@@ -1,10 +1,11 @@
 import axios from 'axios';
-import { db } from 'database';
-import { IPayPal } from 'interfaces';
-import Order from 'models/Order';
 import { isValidObjectId } from 'mongoose';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { EnvironmentVariableNotDefinedError } from 'utils/errors';
+
+import { db } from '@/database';
+import { errors } from '@/utils';
+import { IPayPal } from '@/interfaces';
+import { MOrder } from '@/models/';
 
 const getPayPalAccessToken = async (): Promise<string | null> => {
   const clientId = process.env.NEXT_PUBLIC_PAYPAL_CL;
@@ -12,7 +13,7 @@ const getPayPalAccessToken = async (): Promise<string | null> => {
   const url = process.env.NEXT_PAYPAL_OAUTH_URL;
 
   if (!clientId || !secret || !url) {
-    throw new EnvironmentVariableNotDefinedError('PayPal environment variables missing');
+    throw new errors.EnvironmentVariableNotDefinedError('PayPal environment variables missing');
   }
 
   const body = new URLSearchParams('grant_type=client_credentials');
@@ -53,7 +54,7 @@ const payOrder = async (req: NextApiRequest, res: NextApiResponse) => {
   const url = process.env.NEXT_PAYPAL_ORDERS_URL;
 
   if (!url) {
-    throw new EnvironmentVariableNotDefinedError('PayPal orders URL not defined');
+    throw new errors.EnvironmentVariableNotDefinedError('PayPal orders URL not defined');
   }
 
   const { data } = await axios.get<IPayPal.PayPalResponse>(
@@ -70,7 +71,7 @@ const payOrder = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   await db.connect();
-  const order = await Order.findById(orderId);
+  const order = await MOrder.findById(orderId);
 
   if (!order) {
     await db.disconnect();

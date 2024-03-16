@@ -1,7 +1,6 @@
-import { CSSObject, MantineTheme, MantineThemeOverride } from '@mantine/core';
-import { globalStyles } from './global.styles';
+import { createTheme } from '@mantine/core';
 
-export const configTheme: MantineThemeOverride = {
+export const theme = createTheme({
   colors: {
     brown: [
       '#EFEBE9',
@@ -17,7 +16,6 @@ export const configTheme: MantineThemeOverride = {
     ],
   },
   primaryColor: 'brown',
-  globalStyles: globalStyles as ((theme: MantineTheme) => CSSObject) | undefined,
   defaultRadius: 'md',
   components: {
     Button: {
@@ -36,4 +34,4 @@ export const configTheme: MantineThemeOverride = {
       },
     },
   },
-};
+});

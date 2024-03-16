@@ -15,3 +15,4 @@ export const RequestNotControllerError = createCustomError('RequestNotController
 export const InvalidShippingAddress = createCustomError('InvalidShippingAddress');
 export const ProductDoesNotExist = createCustomError('ProductDoesNotExist');
 export const TotalDoesNotMatch = createCustomError('TotalDoesNotMatch');
+export const ValidationError = createCustomError('ValidationError');

@@ -1,12 +1,11 @@
 import { Flex, Grid, Space, Title } from '@mantine/core';
-import { QueryClient, dehydrate } from '@tanstack/react-query';
-import { ShopLayout } from 'components/layouts';
-import { ProductList } from 'components/products';
-import { dbProducts } from 'database';
-
-import { useProducts, useSearch } from 'hooks/queries';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { GetServerSideProps } from 'next';
 import { FC } from 'react';
+import { useProducts, useSearch } from '@/hooks/queries';
+import { ShopLayout } from '@/components/layouts';
+import { ProductList } from '@/components/products';
+import { dbProducts } from '@/database';
 
 interface Props {
   query: string;
@@ -23,17 +22,17 @@ export const SearchProductPage: FC<Props> = ({ query, foundProducts }) => {
       <Flex gap={5}>
         {foundProducts ? (
           <>
-            <Title order={4} transform="capitalize">
+            <Title order={4} tt="capitalize">
               Term:
             </Title>
-            <Title order={4} color="blue">
+            <Title order={4} c="blue">
               {query}
             </Title>
           </>
         ) : (
           <>
             <Title order={4}>We did not find any products</Title>
-            <Title order={4} color="blue">
+            <Title order={4} c="blue">
               {query}
             </Title>
           </>

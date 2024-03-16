@@ -1,5 +1,6 @@
 import { Flex } from '@mantine/core';
-import { SkeletonProductCard } from './SkeletonProductCard';
+
+import { SkeletonProductCard } from '@/components/UI';
 
 export const SkeletonRowProductCard = () => (
   <Flex miw="100%" mih="40vh" gap="md" direction={{ base: 'column', md: 'row' }} mb={50}>

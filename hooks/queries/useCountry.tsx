@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetcher } from '../../utils/request';
-import { ICountry } from '../../interfaces';
+
+import { fetcher } from '@/utils/request';
+import { ICountry } from '@/interfaces';
 
 export const useCountry = () =>
   useQuery({
