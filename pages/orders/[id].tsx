@@ -17,6 +17,8 @@ import { Session, getServerSession } from 'next-auth';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
+import { notifications } from '@mantine/notifications';
+import { CreateOrderActions, CreateOrderData } from '@paypal/paypal-js';
 import { tesloAPI } from '@/api';
 import { dbOrders, dbUsers } from '@/database';
 import { IOrder } from '@/interfaces';
@@ -25,8 +27,8 @@ import { CartList, OrderSummary } from '@/components/cart';
 import { ShopLayout } from '@/components/layouts';
 
 export type OrderResponseBody = {
-  id: string;
-  status: 'COMPLETED' | 'SAVED' | 'APPROVED' | 'VOIDED' | 'PAYER_ACTION_REQUIRED' | 'CREATED';
+  id?: string;
+  status?: 'COMPLETED' | 'SAVED' | 'APPROVED' | 'VOIDED' | 'PAYER_ACTION_REQUIRED' | 'CREATED';
 };
 
 interface OrderPageProps {
@@ -43,7 +45,13 @@ export const OrderPage: NextPage<OrderPageProps> = ({ order }) => {
   const onOrderCompleted = async (details: OrderResponseBody) => {
     setIsLoading(true);
     if (details.status !== 'COMPLETED') {
-      alert('Order not completed');
+      // alert('Order not completed');
+      notifications.show({
+        id: 'order-not-completed',
+        title: 'Error',
+        color: 'red',
+        message: 'Order not completed',
+      });
     }
 
     try {
@@ -54,22 +62,27 @@ export const OrderPage: NextPage<OrderPageProps> = ({ order }) => {
       router.reload();
     } catch (error) {
       setIsLoading(false);
-      console.log(error);
-      alert('Order not completed');
+      notifications.show({
+        id: 'order-not-completed',
+        title: 'Error',
+        color: 'red',
+        message: 'Order not completed',
+      });
     }
   };
 
-  const createOrder = async (data: CreateOrderData, actions: CreateOrderActions) => {
-    const transactionID = await actions.order.create({
+  const createOrder = async (data: CreateOrderData, actions: CreateOrderActions) =>
+    actions.order.create({
       purchase_units: [
         {
           amount: {
             value: `${order.total}`,
+            currency_code: 'USD',
           },
         },
       ],
+      intent: 'CAPTURE',
     });
-  };
 
   return (
     <ShopLayout title="Order summary ABC456" description="Order summary">
@@ -117,21 +130,7 @@ export const OrderPage: NextPage<OrderPageProps> = ({ order }) => {
                     </Badge>
                   ) : (
                     <PayPalButtons
-                      createOrder={
-                        createOrder
-                        // (_, actions) =>
-                        //   actions.order.create({
-                        //     intent: 'CAPTURE',
-                        //     purchase_units: [
-                        //       {
-                        //         amount: {
-                        //           value: `${order.total}`,
-                        //           currency_code: 'USD',
-                        //         },
-                        //       },
-                        //     ],
-                        //   })
-                      }
+                      createOrder={createOrder}
                       onApprove={(_, actions) =>
                         actions.order!.capture().then((details) => onOrderCompleted(details))
                       }

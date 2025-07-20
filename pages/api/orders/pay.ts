@@ -30,8 +30,10 @@ const getPayPalAccessToken = async (): Promise<string | null> => {
     return data.access_token;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      // eslint-disable-next-line no-console
       console.log(error.response?.data ?? error.message);
     } else {
+      // eslint-disable-next-line no-console
       console.log('Error: ', error);
     }
     return null;

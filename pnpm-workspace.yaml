@@ -1,0 +1,5 @@
+onlyBuiltDependencies:
+  - esbuild
+  - pre-commit
+  - sharp
+  - spawn-sync
