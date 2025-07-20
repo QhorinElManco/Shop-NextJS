@@ -1,41 +1,41 @@
+/* eslint-disable no-console */
 import mongoose from 'mongoose';
 import { envVariables } from '@/utils';
 
-/**
- * 0 = disconnected
- * 1 = connected
- * 2 = connecting
- * 3 = disconnecting
- */
-const mongoConnection = {
-  isConnected: 0,
-};
+let isConnected = false;
 
 export const connect = async () => {
-  if (mongoConnection.isConnected) {
-    return;
-  }
+  if (isConnected) return;
 
-  if (mongoose.connections.length > 0) {
-    mongoConnection.isConnected = mongoose.connections[0].readyState;
-
-    if (mongoConnection.isConnected === 1) {
-      return;
+  try {
+    if (mongoose.connections.length > 0) {
+      const connectionState = mongoose.connections[0].readyState;
+      if (connectionState === 1) {
+        isConnected = true;
+        return;
+      }
     }
 
-    await mongoose.disconnect();
+    await mongoose.connect(envVariables.getMongoUrl() || '');
+    isConnected = true;
+    console.log('Conectado a MongoDB');
+  } catch (error) {
+    console.error('Error conectando a MongoDB:', error);
+    throw error;
   }
-
-  await mongoose.connect(envVariables.getMongoUrl() || '');
-
-  mongoConnection.isConnected = 1;
 };
 
 export const disconnect = async () => {
   if (process.env.NODE_ENV === 'development') return;
 
-  if (mongoConnection.isConnected === 0) return;
-
-  await mongoose.disconnect();
-  mongoConnection.isConnected = 0;
+  // Solo desconectamos si no estamos en proceso de build
+  if (process.env.NODE_ENV === 'production' && !process.env.NEXT_PHASE) {
+    try {
+      await mongoose.disconnect();
+      isConnected = false;
+      console.log('Desconectado de MongoDB');
+    } catch (error) {
+      console.error('Error al desconectar de MongoDB:', error);
+    }
+  }
 };

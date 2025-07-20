@@ -15,6 +15,11 @@ interface ProductPageProps {
   slug: string;
 }
 
+export const config = {
+  unstable_runtimeJS: false,
+  unstable_includeFiles: ['db/**'],
+};
+
 export const ProductPage = ({ slug }: ProductPageProps) => {
   const router = useRouter();
   const { addProductToCart } = useCartContext();
@@ -68,7 +73,12 @@ export const ProductPage = ({ slug }: ProductPageProps) => {
             <SizeSelector
               selectedSize={tempCartProduct.size}
               sizes={productQuery.data.sizes}
-              onSelectedSize={(size) => setTempCartProduct({ ...tempCartProduct, size })}
+              onSelectedSize={(size) =>
+                setTempCartProduct({
+                  ...tempCartProduct,
+                  size,
+                })
+              }
             />
           </Box>
           {/* Cantidad */}
@@ -78,7 +88,12 @@ export const ProductPage = ({ slug }: ProductPageProps) => {
               mt="xs"
               maxValue={productQuery.data.inStock}
               currentValue={tempCartProduct.quantity}
-              onChangeQuantity={(quantity) => setTempCartProduct({ ...tempCartProduct, quantity })}
+              onChangeQuantity={(quantity) =>
+                setTempCartProduct({
+                  ...tempCartProduct,
+                  quantity,
+                })
+              }
             />
           </Box>
           {/* Agregar al carrito */}
