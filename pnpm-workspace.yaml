@@ -3,3 +3,5 @@ onlyBuiltDependencies:
   - pre-commit
   - sharp
   - spawn-sync
+packages:
+  - "."
